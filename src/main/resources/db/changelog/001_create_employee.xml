@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="1" author="vadim">
+        <createTable tableName="employee">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="fst_name" type="varchar(50)"/>
+            <column name="mid_name" type="varchar(50)"/>
+            <column name="position" type="varchar(50)"/>
+            <column name="gender" type="varchar(1)"/>
+            <column name="phone" type="varchar(15)"/>
+            <column name="salary" type="numeric"/>
+            <column name="birthday" type="date"/>
+            <column name="start_dt" type="date"/>
+            <column name="end_dt" type="date"/>
+            <column name="description" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
