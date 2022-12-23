@@ -13,10 +13,10 @@ import java.util.Date;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@Table(name = "employee")
-@NoArgsConstructor
-public class Employee implements Serializable {
+@AllArgsConstructor //todo не стоит расставлять лишних аннотаций
+@Table(name = "employee") //todo обычно название таблицы идёт во множественном числе
+@NoArgsConstructor //todo не стоит расставлять лишних аннотаций
+public class Employee implements Serializable { //todo зачем сериализация?
 
     @Id
     @Column(name = "id",unique = true, nullable = false)
@@ -25,10 +25,10 @@ public class Employee implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "fst_name")
+    @Column(name = "fst_name") //todo не нужно так сокращать названия, пиши как есть - first_name
     private String firstName;
     @Column(name = "mid_name")
-    private String middleName;
+    private String middleName; //todo не нужно так сокращать названия
 
     @Column(name = "gender", nullable = false)
     private String gender;
@@ -40,14 +40,14 @@ public class Employee implements Serializable {
     @Column(name = "salary")
     private Double salary;
 
-    @Column(name = "birthday")
-    private Date birthDay;
+    @Column(name = "birthday") //todo отличаются названия с полем
+    private Date birthDay; //todo вместо Date используй LocalDate
 
-    @Column(name = "start_dt")
-    private Date startDate;
+    @Column(name = "start_dt")//todo не нужно так сокращать названия
+    private Date startDate; //todo вместо Date используй LocalDate
 
-    @Column(name = "end_dt")
-    private Date endDate;
+    @Column(name = "end_dt")//todo не нужно так сокращать названия
+    private Date endDate; //todo вместо Date используй LocalDate
 
     @Column(name = "description")
     private String description;

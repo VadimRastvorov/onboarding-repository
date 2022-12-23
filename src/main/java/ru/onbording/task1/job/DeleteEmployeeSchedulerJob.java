@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Slf4j
-@Component
+@Component //todo это скорее конфигурация
 public class DeleteEmployeeSchedulerJob {
     private final DeleteEmployeeScheduler deleteEmployeeScheduler;
     @Autowired
     public DeleteEmployeeSchedulerJob(DeleteEmployeeScheduler deleteEmployeeScheduler) {
         this.deleteEmployeeScheduler = deleteEmployeeScheduler;
     }
-    @Scheduled(fixedRateString = "${bot.recountNewDeleteFixedRate}")
-    public void findNewArticles() {
+    @Scheduled(fixedRateString = "${bot.recountNewDeleteFixedRate}") //todo по ТЗ необходимо использовать cron и удалять каждую 1 минуту по записи
+    public void findNewArticles() { //todo название метода не соответствует тому, что в нём происходит
         LocalDateTime start = LocalDateTime.now();
         log.info("Find new delete job started.");
         deleteEmployeeScheduler.deleteEmployee();

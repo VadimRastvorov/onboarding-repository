@@ -10,7 +10,7 @@ import ru.onbording.task1.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController //todo в задаче 1 этапа нет RestController, убери
 @AllArgsConstructor
 @RequestMapping("api/employee")
 public class EmployeeController {

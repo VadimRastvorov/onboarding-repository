@@ -1,8 +1,9 @@
-package ru.onbording.task1.producingwebservice;
+package ru.onbording.task1.producingwebservice; //todo название директории не соответствует содержимому
 
 import com.baeldung.springsoap.gen.Employee;
 import com.baeldung.springsoap.gen.GetEmployeeRequest;
 import com.baeldung.springsoap.gen.GetEmployeeResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -14,7 +15,7 @@ import ru.onbording.task1.repository.EmployeeRepository;
 public class EmployeeEndpoint {
     private static final String NAMESPACE_URI = "http://spring.io/guides/gs-producing-web-service";
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository; //todo должен быть финальным
 
     @Autowired
     public EmployeeEndpoint(EmployeeRepository employeeRepository) {
@@ -25,8 +26,11 @@ public class EmployeeEndpoint {
     @ResponsePayload
     public GetEmployeeResponse getEmployee(@RequestPayload GetEmployeeRequest request) {
         GetEmployeeResponse response = new GetEmployeeResponse();
-        ru.onbording.task1.model.Employee employee = employeeRepository.findById(request.getId()).get();
-        Employee employee1 = new Employee();
+        //todo для работы с БД создай отдельный класс EmployeeService, так же обработай случай, если такого id нет в бд
+        ru.onbording.task1.model.Employee employee = employeeRepository.findById(request.getId()).get(); //todo чтоб такого не было назови, например, Employee и EmployeeDto
+        Employee employee1 = new Employee(); //todo название объекта не катит
+
+        //todo то что ниже - можно сделать изящнее
         employee1.setId(employee.getId());
         employee1.setLastName(employee.getLastName());
         employee1.setFirstName(employee.getFirstName());

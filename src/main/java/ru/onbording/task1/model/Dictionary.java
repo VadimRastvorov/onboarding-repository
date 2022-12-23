@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "dictionary")
-public class Dictionary implements Serializable {
+public class Dictionary implements Serializable { //todo не понимаю что за сущность и зачем?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

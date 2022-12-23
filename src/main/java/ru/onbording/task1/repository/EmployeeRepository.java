@@ -6,5 +6,5 @@ import ru.onbording.task1.model.Employee;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    List<Employee> findByGender(String gender);
+    List<Employee> findByGender(String gender); //todo если возвращаешь список, тогда название метода findAllByGender
 }
