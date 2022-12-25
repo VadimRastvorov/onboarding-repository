@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "", propOrder = {
         "employee"
 })
-@XmlRootElement(name = "getEmployeeResponse")
-public class GetEmployeeResponse {
+@XmlRootElement(name = "setEmployeeRequest")
+public class SetEmployeeRequest {
 
     @XmlElement(required = true)
     protected Employee employee;

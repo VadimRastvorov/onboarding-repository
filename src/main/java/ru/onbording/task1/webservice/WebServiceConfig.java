@@ -1,4 +1,4 @@
-package ru.onbording.task1.producingwebservice;
+package ru.onbording.task1.webservice;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

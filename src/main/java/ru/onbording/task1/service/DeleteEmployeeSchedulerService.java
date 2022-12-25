@@ -1,5 +1,5 @@
 package ru.onbording.task1.service;
 
-public interface DeleteEmployeeScheduler {
+public interface DeleteEmployeeSchedulerService {
     void deleteEmployee();
 }

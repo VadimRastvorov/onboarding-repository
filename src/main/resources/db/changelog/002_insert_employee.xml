@@ -5,7 +5,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
     <changeSet id="2" author="vadim">
         <sql>
-            insert into employee (id, last_name, fst_name, mid_name, position, gender, phone, salary, birthday, start_dt, description) values
+            insert into employees (id, last_name, first_name, middle_name, position, gender, phone, salary, birthday, start_date, description) values
             (1, 'Сидоров', 'Сидор', 'Сидрович','manager', 'M','+77777777777','666666','1984-11-12','2001-01-02', ''),
             (2, 'Иванов', 'Иван', 'Иванович','manager', 'M','+77772222222','333333','1999-01-13','2001-01-02',''),
             (3, 'Владимиров', 'Владимир', 'Вовкович','manager', 'M','+77771111111','5555555','1980-11-11','2001-01-02',''),

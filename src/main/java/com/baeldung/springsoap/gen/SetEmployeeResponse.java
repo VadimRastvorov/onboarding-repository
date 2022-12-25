@@ -8,7 +8,10 @@
 
 package com.baeldung.springsoap.gen;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -21,7 +24,7 @@ import javax.xml.bind.annotation.*;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="employee" type="{http://www.baeldung.com/springsoap/gen}employee"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,32 +33,25 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "employee"
+        "id"
 })
-@XmlRootElement(name = "getEmployeeResponse")
-public class GetEmployeeResponse {
+@XmlRootElement(name = "setEmployeeResponse")
+public class SetEmployeeResponse {
 
-    @XmlElement(required = true)
-    protected Employee employee;
+    protected long id;
 
     /**
-     * Gets the value of the employee property.
-     *
-     * @return possible object is
-     * {@link Employee }
+     * Gets the value of the id property.
      */
-    public Employee getEmployee() {
-        return employee;
+    public long getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the employee property.
-     *
-     * @param value allowed object is
-     *              {@link Employee }
+     * Sets the value of the id property.
      */
-    public void setEmployee(Employee value) {
-        this.employee = value;
+    public void setId(long value) {
+        this.id = value;
     }
 
 }
