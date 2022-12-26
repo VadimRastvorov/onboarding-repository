@@ -52,4 +52,9 @@ public class EmployeeDto { //todo зачем сериализация? //done
     @Column(name = "description")
     private String description;
 
+    public String employeeCheckData(){
+        String outMessage = "";
+
+        return outMessage;
+    }
 }

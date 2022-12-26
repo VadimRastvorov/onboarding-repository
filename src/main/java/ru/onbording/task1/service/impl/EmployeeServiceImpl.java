@@ -29,8 +29,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public SetEmployeeResponse saveEmployee(SetEmployeeRequest setEmployeeRequest) {
         SetEmployeeResponse response = new SetEmployeeResponse();
-        EmployeeDto employee = employeeRepository.save(mappingService.convertEmployeeSoapToDto(setEmployeeRequest.getEmployee()));
-        response.setId(employee.getId());
+        EmployeeDto employee = mappingService.convertEmployeeSoapToDto(setEmployeeRequest.getEmployee());
+        String employeeCheck = employee.employeeCheckData();
+        if (employeeCheck != "") {
+            response.setStatus("Создана запись с id: " + employee.getId());
+        } else {
+            employeeRepository.save(mappingService.convertEmployeeSoapToDto(setEmployeeRequest.getEmployee()));
+            response.setStatus("Создана запись с id: " + employee.getId());
+        }
         return response;
     }
 
