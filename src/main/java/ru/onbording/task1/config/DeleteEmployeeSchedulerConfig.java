@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Slf4j
-@Configuration //todo это скорее конфигурация // done
-@EnableScheduling //todo эту аннотацию перенеси в шедулер //done
+@Configuration
+@EnableScheduling
 public class DeleteEmployeeSchedulerConfig {
     private final DeleteEmployeeSchedulerService deleteEmployeeSchedulerService;
 
@@ -22,8 +22,7 @@ public class DeleteEmployeeSchedulerConfig {
     }
 
     @Scheduled(cron = "1 * * * * *")
-    //todo по ТЗ необходимо использовать cron и удалять каждую 1 минуту по записи //done
-    public void deleteEmployee() { //todo название метода не соответствует тому, что в нём происходит //done
+    public void deleteEmployee() {
         LocalDateTime start = LocalDateTime.now();
         log.info("Завершение шедулера удаления записи из БД");
         deleteEmployeeSchedulerService.deleteEmployee();

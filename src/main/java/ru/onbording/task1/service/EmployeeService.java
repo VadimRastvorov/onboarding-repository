@@ -1,4 +1,3 @@
-//todo для работы с БД создай отдельный класс EmployeeService, так же обработай случай, если такого id нет в бд //done
 package ru.onbording.task1.service;
 
 import com.baeldung.springsoap.gen.*;

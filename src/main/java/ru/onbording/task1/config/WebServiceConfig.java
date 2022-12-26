@@ -1,4 +1,3 @@
-//todo все конфиги должны находиться в отдельной директории config //done
 package ru.onbording.task1.config;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

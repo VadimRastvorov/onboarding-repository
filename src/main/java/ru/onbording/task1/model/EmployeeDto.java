@@ -1,7 +1,8 @@
-//todo чтоб такого не было назови, например, Employee и EmployeeDto //done
 package ru.onbording.task1.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -13,10 +14,10 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-//todo не стоит расставлять лишних аннотаций //done
-//todo не стоит расставлять лишних аннотаций //done
-@Table(name = "employees")  //todo обычно название таблицы идёт во множественном числе //done
-public class EmployeeDto { //todo зачем сериализация? //done
+@Builder
+@Table(name = "employees")
+@RequiredArgsConstructor
+public class EmployeeDto {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
@@ -25,31 +26,33 @@ public class EmployeeDto { //todo зачем сериализация? //done
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "first_name")  //todo не нужно так сокращать названия, пиши как есть - first_name //done
+    @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "middle_name")
-    private String middleName;  //todo не нужно так сокращать названия //Изменил название колонки
+    private String middleName;
 
     @Column(name = "gender")
     private String gender;
 
     @Column(name = "phone")
     private String phone;
+
     @Column(name = "position")
     private String position;
+
     @Column(name = "salary")
     private Double salary;
 
-    @Column(name = "birthday") //todo отличаются названия с полем // колонка в БД называется birthday
-    private LocalDate birthDay; //todo вместо Date используй LocalDate // done
+    @Column(name = "birthday")
+    private LocalDate birthDay; //todo birthday
 
-    @Column(name = "start_date") //todo не нужно так сокращать названия //done
-    private LocalDate startDate; //todo вместо Date используй LocalDate // done
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column(name = "end_date") //todo не нужно так сокращать названия //done
-    private LocalDate endDate; //todo вместо Date используй LocalDate // done
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "description")
     private String description;
-
 }

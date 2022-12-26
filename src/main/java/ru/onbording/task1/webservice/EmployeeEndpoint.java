@@ -1,5 +1,5 @@
 package ru.onbording.task1.webservice;
-//todo название директории не соответствует содержимому //done
+//todo эндпоинты должны быть в endpoint
 
 import com.baeldung.springsoap.gen.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,7 +10,7 @@ import ru.onbording.task1.service.MappingService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private final EmployeeRepository employeeRepository; //todo должен быть финальным //done
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
@@ -19,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private MappingService mappingService = new MappingServiceImpl();
 
-    public GetEmployeeResponse getEmployeeById(Long id) {
+    public GetEmployeeResponse getEmployeeById(Long id) { //todo get меняй на fetch
         GetEmployeeResponse response = new GetEmployeeResponse();
         if (employeeRepository.existsById(id)) {
             response.setEmployee(mappingService.convertEmployeeDtotoSoap(employeeRepository.findById(id).get()));

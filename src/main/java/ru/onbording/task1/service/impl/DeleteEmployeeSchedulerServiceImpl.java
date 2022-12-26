@@ -11,8 +11,7 @@ import ru.onbording.task1.service.DeleteEmployeeSchedulerService;
 @Slf4j
 @Service
 public class DeleteEmployeeSchedulerServiceImpl implements DeleteEmployeeSchedulerService {
-    //todo Slf4j ? // поставил анатацию
-    private final EmployeeRepository employeeRepository;  //todo final //done
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public DeleteEmployeeSchedulerServiceImpl(EmployeeRepository employeeRepository) {
@@ -21,7 +20,7 @@ public class DeleteEmployeeSchedulerServiceImpl implements DeleteEmployeeSchedul
 
     @Override
     public void deleteEmployee() {
-        if (employeeRepository.count() > 0) {//todo если в бд нет сотрудников поймаешь IndexOutOfBoundsException //перед удалением проверяю колличество сотрудников
+        if (employeeRepository.count() > 0) {
             EmployeeDto employee = employeeRepository.findAll().get(0);
             //employeeRepository.delete(employee);
             log.info("delete employee = {} {}, left {}", employee.getLastName(), employee.getFirstName(), employeeRepository.count());
