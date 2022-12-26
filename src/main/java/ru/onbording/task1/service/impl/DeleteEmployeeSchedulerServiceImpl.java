@@ -1,17 +1,18 @@
-package ru.onbording.task1.service;
+//todo если это сервис то название должно - SchedulerService //done
+package ru.onbording.task1.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.onbording.task1.model.EmployeeDto;
 import ru.onbording.task1.repository.EmployeeRepository;
+import ru.onbording.task1.service.DeleteEmployeeSchedulerService;
 
+@Slf4j
 @Service
 public class DeleteEmployeeSchedulerServiceImpl implements DeleteEmployeeSchedulerService {
-    private static final Logger log = LoggerFactory.getLogger(DeleteEmployeeSchedulerServiceImpl.class);
-
-    private final EmployeeRepository employeeRepository;
+    //todo Slf4j ? // поставил анатацию
+    private final EmployeeRepository employeeRepository;  //todo final //done
 
     @Autowired
     public DeleteEmployeeSchedulerServiceImpl(EmployeeRepository employeeRepository) {
@@ -20,7 +21,7 @@ public class DeleteEmployeeSchedulerServiceImpl implements DeleteEmployeeSchedul
 
     @Override
     public void deleteEmployee() {
-        if (employeeRepository.count() > 0) {
+        if (employeeRepository.count() > 0) {//todo если в бд нет сотрудников поймаешь IndexOutOfBoundsException //перед удалением проверяю колличество сотрудников
             EmployeeDto employee = employeeRepository.findAll().get(0);
             //employeeRepository.delete(employee);
             log.info("delete employee = {} {}, left {}", employee.getLastName(), employee.getFirstName(), employeeRepository.count());
