@@ -1,14 +1,18 @@
 //todo для работы с БД создай отдельный класс EmployeeService, так же обработай случай, если такого id нет в бд //done
 package ru.onbording.task1.service;
 
-import com.baeldung.springsoap.gen.*;
+import ru.onbording.task1.entity.Employee;
+
+import java.util.List;
 
 public interface EmployeeService {
-    GetEmployeeResponse getEmployeeById(Long id);
+    Employee fetchEmployeeById(Long id);
 
-    SetEmployeeResponse saveEmployee(SetEmployeeRequest setEmployeeRequest);
+    List<String> saveEmployee(Employee employee);
 
-    GetEmployeesResponse getEmployeesAll();
+    List<Employee> fetchEmployeesAll();
 
-    DeleteEmployeeResponse deleteEmployeeById(Long id);
+    String deleteEmployeeById(Long id);
+
+    void deleteOneEmployee();
 }
