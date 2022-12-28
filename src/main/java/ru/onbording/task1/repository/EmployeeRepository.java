@@ -3,12 +3,17 @@ package ru.onbording.task1.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import ru.onbording.task1.model.EmployeeDto;
+import ru.onbording.task1.entity.Employee;
 
-public interface EmployeeRepository extends JpaRepository<EmployeeDto, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query("")
     @Modifying
-    void delete(@Param(value = "value") String value); //todo тебе шаблон
+    @Query(value = "delete FROM public.employees emp where emp.id = (select min(employees.id) from public.employees employees)",
+            nativeQuery = true)
+    void deleteEmployee();
+
+    @Modifying
+    @Query(value = "delete FROM public.employees emp where emp.id = ?",
+            nativeQuery = true)
+    void deleteEmployeeById(Long id);
 }

@@ -1,3 +1,4 @@
+//todo чтоб такого не было назови, например, Employee и EmployeeDto //done
 package ru.onbording.task1.model;
 
 import lombok.Builder;
@@ -45,7 +46,7 @@ public class EmployeeDto {
     private Double salary;
 
     @Column(name = "birthday")
-    private LocalDate birthDay; //todo birthday
+    private LocalDate birthday;
 
     @Column(name = "start_date")
     private LocalDate startDate;

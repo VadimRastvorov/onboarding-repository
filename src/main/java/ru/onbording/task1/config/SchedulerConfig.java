@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import ru.onbording.task1.service.DeleteEmployeeSchedulerService;
+import ru.onbording.task1.service.EmployeeService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -13,20 +13,19 @@ import java.time.ZoneOffset;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class DeleteEmployeeSchedulerConfig {
-    private final DeleteEmployeeSchedulerService deleteEmployeeSchedulerService;
+public class SchedulerConfig {
+    private final EmployeeService employeeService;
 
     @Autowired
-    public DeleteEmployeeSchedulerConfig(DeleteEmployeeSchedulerService deleteEmployeeSchedulerService) {
-        this.deleteEmployeeSchedulerService = deleteEmployeeSchedulerService;
+    public SchedulerConfig(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
-    @Scheduled(cron = "1 * * * * *")
+    @Scheduled(cron = "${bot.recountNewDeleteFixedRate}")
     public void deleteEmployee() {
         LocalDateTime start = LocalDateTime.now();
         log.info("Завершение шедулера удаления записи из БД");
-        deleteEmployeeSchedulerService.deleteEmployee();
-
+        //employeeService.deleteOneEmployee();
         LocalDateTime end = LocalDateTime.now();
         log.info("Завершение шедулера удаления записи из БД. Время выполнения в секундах: {}",
                 end.toEpochSecond(ZoneOffset.UTC) - start.toEpochSecond(ZoneOffset.UTC));
