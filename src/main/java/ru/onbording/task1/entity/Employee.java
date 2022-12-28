@@ -1,9 +1,6 @@
 package ru.onbording.task1.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 @Table(name = "employees")
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     @Id
