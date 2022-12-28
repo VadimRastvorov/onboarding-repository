@@ -1,16 +1,7 @@
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
-    <changeSet id="3" author="vadim">
-        <sql>
-            insert into employees (id, last_name, first_name, middle_name, position, gender, phone, salary, birthday, start_date, description) values
+insert into employees (id, last_name, first_name, middle_name, position, gender, phone, salary, birthday, start_date, description) values
             (7, 'Сидоров', 'Сидор', 'Сидрович','manager', 'M','+77777777777','666666','1984-11-12','2001-01-02', ''),
             (8, 'Иванов', 'Иван', 'Иванович','manager', 'M','+77772222222','333333','1999-01-13','2001-01-02',''),
             (9, 'Владимиров', 'Владимир', 'Вовкович','manager', 'M','+77771111111','5555555','1980-11-11','2001-01-02',''),
             (10, 'Иванова', 'Ивана', 'Ивановна','manager', 'F','+77777777777','666666','1980-11-11','2001-01-02',''),
             (11, 'Сидорова', 'Сидора', 'Сидровна','manager', 'F','+77777777777','666666','1980-11-11','2001-01-02',''),
-            (12, 'Морок', 'Марго', 'Сидровна','manager', 'F','+77777777777','666666','1980-11-11','2001-01-02','')</sql>
-    </changeSet>
-</databaseChangeLog>
+            (12, 'Морок', 'Марго', 'Сидровна','manager', 'F','+77777777777','666666','1980-11-11','2001-01-02','')

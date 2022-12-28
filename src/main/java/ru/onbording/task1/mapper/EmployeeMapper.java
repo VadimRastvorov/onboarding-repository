@@ -26,20 +26,21 @@ public class EmployeeMapper {
     }
 
     public EmployeeDto employeeEntityToDto(Employee employee) {
-        return EmployeeDto.builder()
-                .id(employee.getId())
-                .lastName(employee.getLastName())
-                .firstName(employee.getFirstName())
-                .middleName(employee.getMiddleName())
-                .phone(employee.getPhone())
-                .position(employee.getPosition())
-                .gender(employee.getGender())
-                .birthday(localDateToString(employee.getBirthday()))
-                .salary(employee.getSalary().toString())
-                .startDate(localDateToString(employee.getStartDate()))
-                .endDate(localDateToString(employee.getEndDate()))
-                .description(employee.getDescription())
-                .build();
+        EmployeeDto employeeDto = new EmployeeDto();
+
+        employeeDto.setId(employee.getId());
+        employeeDto.setLastName(employee.getLastName());
+        employeeDto.setFirstName(employee.getFirstName());
+        employeeDto.setMiddleName(employee.getMiddleName());
+        employeeDto.setPhone(employee.getPhone());
+        employeeDto.setPosition(employee.getPosition());
+        employeeDto.setGender(employee.getGender());
+        employeeDto.setBirthday(localDateToString(employee.getBirthday()));
+        employeeDto.setSalary(employee.getSalary().toString());
+        employeeDto.setStartDate(localDateToString(employee.getStartDate()));
+        employeeDto.setEndDate(localDateToString(employee.getEndDate()));
+        employeeDto.setDescription(employee.getDescription());
+         return employeeDto;
     }
 
     private String localDateToString(LocalDate localDate) {

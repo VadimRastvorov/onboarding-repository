@@ -1,10 +1,7 @@
 //todo чтоб такого не было назови, например, Employee и EmployeeDto //done
 package ru.onbording.task1.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +16,7 @@ import java.time.LocalDate;
 //todo не стоит расставлять лишних аннотаций //done
 @Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "employees")
 //todo обычно название таблицы идёт во множественном числе //done
 public class Employee { //todo зачем сериализация? //done
