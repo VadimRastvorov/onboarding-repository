@@ -21,8 +21,8 @@ public class EmployeeEndpoint {
     public EmployeeEndpoint(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-    private EmployeeMapper mappingService = new EmployeeMapper();
+//todo работу с маппингом нужно перекинуть в EmployeeService
+    private EmployeeMapper mappingService = new EmployeeMapper(); //todo Bean так объявлять не нужно и должен быть final
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "fetchEmployeeRequest")
     @ResponsePayload

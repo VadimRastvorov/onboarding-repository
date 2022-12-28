@@ -24,7 +24,7 @@ public class SchedulerConfig {
     @Scheduled(cron = "${bot.recountNewDeleteFixedRate}")
     public void deleteEmployee() {
         LocalDateTime start = LocalDateTime.now();
-        log.info("Завершение шедулера удаления записи из БД");
+        log.info("Завершение шедулера удаления записи из БД"); //todo исправить текст
         //employeeService.deleteOneEmployee();
         LocalDateTime end = LocalDateTime.now();
         log.info("Завершение шедулера удаления записи из БД. Время выполнения в секундах: {}",

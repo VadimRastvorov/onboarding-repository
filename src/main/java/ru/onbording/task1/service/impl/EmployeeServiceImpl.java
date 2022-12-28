@@ -24,11 +24,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public List<String> saveEmployee(Employee employee) {
-        EmployeeValidationService employeeValidationService = new EmployeeValidationServiceImpl();
+        EmployeeValidationService employeeValidationService = new EmployeeValidationServiceImpl(); //todo так не пойдёт, используй бины
         List<String> messages = employeeValidationService.checkEmployeeData(employee);
         if (messages.size() == 0) {
             employeeRepository.save(employee);
-            messages.add("Запись добавленна ");
+            messages.add("Запись добавленна "); //todo опечатка
         }
         return messages;
     }

@@ -1,5 +1,4 @@
-//todo чтоб такого не было назови, например, Employee и EmployeeDto //done
-package ru.onbording.task1.model;
+package ru.onbording.task1.entity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 @Builder
 @Table(name = "employees")
 @RequiredArgsConstructor
-public class EmployeeDto {
+public class Employee {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
