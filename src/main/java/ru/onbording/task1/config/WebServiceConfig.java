@@ -1,4 +1,4 @@
-package ru.onbording.task1.producingwebservice; //todo все конфиги должны находиться в отдельной директории config
+package ru.onbording.task1.config;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

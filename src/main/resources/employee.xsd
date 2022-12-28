@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.baeldung.com/springsoap/gen"
            targetNamespace="http://www.baeldung.com/springsoap/gen" elementFormDefault="qualified">
 
-    <xs:element name="getEmployeeRequest">
+    <xs:element name="fetchEmployeeRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="id" type="xs:long"/>
@@ -10,15 +10,62 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="getEmployeeResponse">
+    <xs:element name="fetchEmployeeResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="employee" type="tns:employee"/>
+                <xs:element name="employee" type="tns:employeeDto"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="employee">
+    <xs:element name="deleteEmployeeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteEmployeeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchEmployeesRequest">
+        <xs:complexType>
+            <xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fetchEmployeesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="employee" type="tns:employeeDto" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveEmployeeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveEmployeeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="employee" type="tns:employeeDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="employeeDto">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="lastName" type="xs:string"/>
@@ -28,9 +75,9 @@
             <xs:element name="phone" type="xs:string"/>
             <xs:element name="position" type="xs:string"/>
             <xs:element name="salary" type="xs:string"/>
-            <xs:element name="birthDay" type="xs:date"/>
-            <xs:element name="startDate" type="xs:date"/>
-            <xs:element name="endDate" type="xs:date"/>
+            <xs:element name="birthday" type="xs:string"/>
+            <xs:element name="startDate" type="xs:string"/>
+            <xs:element name="endDate" type="xs:string"/>
             <xs:element name="description" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
