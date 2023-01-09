@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MappingService {
+    //todo для каждой сущности свой mapper, наименование классов EmployeeMapper и TaskMapper, хранить в директории mapper (желательно сделать интерфейс Mapper для них)
     public EmployeeDto employeeToEmployeeDto(Employee employee) {
         return EmployeeDto.builder()
                 .id(employee.getId())
@@ -38,7 +39,8 @@ public class MappingService {
     }
 
 
-    public Employee employeeDtoToEmployeeUpdate(EmployeeDto employeeDto, Employee employee) {
+    public Employee employeeDtoToEmployeeUpdate(EmployeeDto employeeDto, Employee employee) { //todo такого метода в mapper не должно быть, обычно где то в сервисах
+        //todo что то страшное происходит тут)) уж очень много условий
         if (Objects.nonNull(employeeDto.getBirthday())) {
             employee.setBirthday(employeeDto.getBirthday());
         }
@@ -127,7 +129,7 @@ public class MappingService {
                 .build();
     }
 
-    public ResponseEmployeeMessagesDto listStringToResponseEmployeeMessagesDto(List<String> messages, EmployeeDto employeeDto) {
+    public ResponseEmployeeMessagesDto listStringToResponseEmployeeMessagesDto(List<String> messages, EmployeeDto employeeDto) { //todo это не маппинг) это создание объекта
         return ResponseEmployeeMessagesDto.builder()
                 .employeeDto(employeeDto)
                 .messages(messages.stream().map(temp -> {

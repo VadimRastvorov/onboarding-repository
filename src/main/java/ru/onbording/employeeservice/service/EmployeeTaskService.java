@@ -29,12 +29,14 @@ public class EmployeeTaskService {
     private final EmployeeTaskRepository employeeTaskRepository;
 
     public EmployeeTaskDto fetchEmployeeTaskById(UUID id) {
-        return mappingService.employeeTaskToEmployeeTaskDto(employeeTaskRepository.findTaskByTaskId(id));
+        return mappingService.employeeTaskToEmployeeTaskDto(employeeTaskRepository.findTaskByTaskId(id)); //todo не хватает ответа, если такого uuid нет
     }
 
     public ResponseMessageDto saveEmployeeTask(EmployeeTaskDto employeeTaskDto) {
+        //todo лучше работать с репозиторием для тасков и сохранять через, раз у dto уже есть employeeId
+        //todo через этот метод можно обойти ограничение по количеству тасков у той или иной должности
         Employee employee = employeeRepository.findById(employeeTaskDto.getEmployeeId()).orElseThrow();
-        employee.getEmployeeTasks().add(EmployeeTask
+        employee.getEmployeeTasks().add(EmployeeTask //todo нужно сделать сервис TaskMapper
                 .builder()
                 .description(employeeTaskDto.getDescription())
                 .build());
@@ -64,7 +66,7 @@ public class EmployeeTaskService {
     }
 
     public ResponseMessageDto deleteEmployeeTaskById(UUID id) {
-        employeeTaskRepository.deleteTaskById(id);
+        employeeTaskRepository.deleteTaskById(id); //todo что будет если в запросе указали не существующий uuid?)
         return ResponseMessageDto
                 .builder()
                 .message(String.format(

@@ -14,20 +14,20 @@ import java.util.UUID;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Modifying
-    @Query(value = "DELETE FROM PUBLIC.EMPLOYEES EMP WHERE EMP.ID = " +
-            "(SELECT MIN(EMPLOYEES.ID) FROM PUBLIC.EMPLOYEES EMPLOYEES)", //todo разбей чтоб влезало в ограничение //done
+    @Query(value = "DELETE FROM public.employees emp WHERE emp.id = " +
+            "(SELECT MIN(employees.id) FROM public.employees employees)",
             nativeQuery = true)
     void deleteEmployee();
 
     @Modifying
-    @Query(value = "DELETE FROM PUBLIC.EMPLOYEES EMP WHERE EMP.ID = :id", //todo SQL запросы обычно пишут в UpperCase, чтобы было видно где команда, а где переменная //done
+    @Query(value = "DELETE FROM public.employees emp WHERE emp.id = :id",
             nativeQuery = true)
     void deleteEmployeeById(@Param("id") long id);
 
-    @Query(value = "SELECT * FROM PUBLIC.EMPLOYEES EMP WHERE EMP.ID in (SELECT employee_id FROM PUBLIC.TASK TASK " +
-            "WHERE  TASK.ID = :id)",
+    @Query(value = "SELECT * FROM public.employees emp WHERE emp.id in (SELECT employee_id FROM public.task task " +
+            "WHERE  task.id = :id)",
             nativeQuery = true)
-    Employee findEmployeeByTaskId(@Param("id") UUID id);
+    Employee findEmployeeByTaskId(@Param("id") UUID id); //todo не используется?
 
     List<Employee> findAllByOrderByIdAsc();
 }

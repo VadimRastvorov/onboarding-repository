@@ -23,7 +23,7 @@ public class EmployeeTaskController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessageDto> deleteTask(@PathVariable UUID id) {
-        log.info("вызов метода deleteTask");
+        log.info("вызов метода deleteTask"); //todo желательно в логи записывать параметры запроса, в данном случае id
         return new ResponseEntity<>(employeeTaskService.deleteEmployeeTaskById(id), HttpStatus.OK);
     }
 
@@ -34,7 +34,7 @@ public class EmployeeTaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeTaskDto> getEmployeeTaskId(@PathVariable UUID id) {
+    public ResponseEntity<EmployeeTaskDto> getEmployeeTaskId(@PathVariable UUID id) { //todo fetchEmployeeTaskById
         log.info("вызов метода getEmployeeTaskId");
         return new ResponseEntity<>(employeeTaskService.fetchEmployeeTaskById(id), HttpStatus.OK);
     }

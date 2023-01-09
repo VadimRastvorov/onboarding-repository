@@ -11,9 +11,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeTaskDto {
+public class EmployeeTaskDto { //todo наименование TaskDto
+    //todo желательно у dto тип полей ставить String
 
-    private UUID id;
+    private UUID id; //todo наименования uuid
 
     private String description;
 

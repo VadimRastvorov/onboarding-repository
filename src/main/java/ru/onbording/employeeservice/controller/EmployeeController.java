@@ -25,11 +25,11 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Autowired
-    private final MappingService mappingService;
+    private final MappingService mappingService; //todo не используется?
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessageDto> deleteEmployee(@PathVariable Long id) {
-        log.info("вызов метода deleteEmployee");
+        log.info("вызов метода deleteEmployee"); //todo желательно в логи записывать параметры запроса, в данном случае id
         return new ResponseEntity<>(employeeService.deleteEmployeeById(id), HttpStatus.OK);
     }
 
@@ -40,7 +40,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeId(@PathVariable Long id) {
+    public ResponseEntity<EmployeeDto> getEmployeeId(@PathVariable Long id) { //todo fetchEmployeeById
         log.info("вызов метода getEmployeeId");
         return new ResponseEntity<>(employeeService.fetchEmployeeById(id), HttpStatus.OK);
     }

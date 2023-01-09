@@ -15,10 +15,10 @@ import java.util.UUID;
 @Table(name = "tasks")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class EmployeeTask {
+public class EmployeeTask { //todo Лучше сущность назвать Task
     @Id
-    @Column(name = "id")
-    private UUID id = UUID.randomUUID();
+    @Column(name = "id")   //todo наименования uuid, возможно чтоб не иметь трудностей проще установить тип String
+    private UUID id = UUID.randomUUID(); //todo вместо присваивания при создании лучше использовать генерацию предоставляемую hibernate, у него есть стратегия для генерации uuid
 
     @Column(name = "description")
     private String description;

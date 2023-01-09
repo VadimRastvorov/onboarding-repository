@@ -19,7 +19,7 @@ public class EmployeeValidationService { //todo должен быть бином
     @Autowired
     private final EmployeeTaskRepository employeeTaskRepository;
 
-    public List<String> checkData(EmployeeDto employeeDto) {
+    public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше
 
         List<String> messages = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class EmployeeValidationService { //todo должен быть бином
                     employeeDto.getPosition()));
         }
         if (checkPhone(employeeDto.getPhone())) {
-            messages.add(String.format(MessageBundleConfig.getMessageBundleValue("employee.phone"), employeeDto.getPhone())); //todo не совсем понятно то это за формат)
+            messages.add(String.format(MessageBundleConfig.getMessageBundleValue("employee.phone"), employeeDto.getPhone()));
         }
         if (!Position.checkTasks(employeeTaskRepository.countTasksByEmployeeId(employeeDto.getId()), employeeDto.getPosition())) {
             messages.add(String.format(MessageBundleConfig.getMessageBundleValue("task.taskCount")));
@@ -45,13 +45,11 @@ public class EmployeeValidationService { //todo должен быть бином
         return messages;
     }
 
-    private boolean checkGender(String gender) { //todo просто возвращай булево выражение, не используя if
-        //todo типы гендера лучше вынести в отдельный enum //done
+    private boolean checkGender(String gender) {
         return !Gender.checkValue(gender);
     }
 
-    private boolean checkPhone(String phone) { //todo просто возвращай булево выражение, не используя if //done
-        //todo количество цифр можно указать в регулярном выражении //done
+    private boolean checkPhone(String phone) {
         return !(phone == null || phone.matches("\\d{11}"));
     }
 

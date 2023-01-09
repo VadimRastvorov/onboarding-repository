@@ -22,13 +22,13 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     @Autowired
-    private final EmployeeValidationService employeeValidationService; //todo так не пойдёт, используй бины // done
+    private final EmployeeValidationService employeeValidationService;
 
     @Autowired
     private final MappingService mappingService;
 
     public EmployeeDto fetchEmployeeById(Long id) {
-        return mappingService.employeeToEmployeeDto(employeeRepository.findById(id).orElseThrow());
+        return mappingService.employeeToEmployeeDto(employeeRepository.findById(id).orElseThrow()); //todo всё таки не хватает ответа при отсутствии такого id
     }
 
     public ResponseEmployeeMessagesDto saveEmployee(EmployeeDto employeeDto) {
@@ -37,8 +37,8 @@ public class EmployeeService {
             Employee employee = employeeRepository.save(mappingService.employeeDtoToEmployee(employeeDto));
             messages.add(String.format(
                     MessageBundleConfig.getMessageBundleValue("employee.addRow"),
-                    employee.getId())); //todo опечатка //done
-            employeeDto = mappingService.employeeToEmployeeDto(employee);
+                    employee.getId()));
+            employeeDto = mappingService.employeeToEmployeeDto(employee); //todo желательно полученные параметры не менять в процессе, лучше создавать новые
         }
         return mappingService.listStringToResponseEmployeeMessagesDto(messages,
                 employeeDto);
@@ -53,9 +53,10 @@ public class EmployeeService {
             messages.add(String.format(
                     MessageBundleConfig.getMessageBundleValue("employee.updateRow"),
                     employee.getId()));
-            employeeDto = mappingService.employeeToEmployeeDto(employee);
+            employeeDto = mappingService.employeeToEmployeeDto(employee); //todo тут убери, получилось дублирование
         }
-        employeeDto = mappingService.employeeToEmployeeDto(employee);
+        //todo желательно полученные параметры не менять в процессе, лучше создавать новые
+        employeeDto = mappingService.employeeToEmployeeDto(employee); //todo вот тут повторное выполнение действия выше
         return mappingService.listStringToResponseEmployeeMessagesDto(messages,
                 employeeDto);
     }
@@ -64,7 +65,7 @@ public class EmployeeService {
         return employeeRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(employee -> {
-                    return mappingService.employeeToEmployeeDto(employee);
+                    return mappingService.employeeToEmployeeDto(employee); //todo idea подсказывает как сделать красивее)
                 })
                 .collect(Collectors.toList());
     }

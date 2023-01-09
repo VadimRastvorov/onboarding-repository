@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.controller.dto;
+package ru.onbording.employeeservice.controller.dto; //todo директория dto не должна быть в контроллере, положи рядом
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDto {
+public class EmployeeDto { //todo  желательно у dto тип полей ставить String, для id можно оставить long
 
     private long id;
 
