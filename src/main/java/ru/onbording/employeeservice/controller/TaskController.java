@@ -22,7 +22,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<ResponseMessageDto> deleteTask(@PathVariable String uuid) {
+    public ResponseEntity<ResponseMessageDto> deleteTaskById(@PathVariable String uuid) {
         log.info("вызов метода deleteTask c uuid: '{}'", uuid);
         return new ResponseEntity<>(taskService.deleteTaskById(uuid), HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class TaskController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<TaskDto> fetchTaskId(@PathVariable String uuid) {
+    public ResponseEntity<TaskDto> fetchTaskById(@PathVariable String uuid) {
         log.info("вызов метода fetchTaskId c uuid: '{}'", uuid);
         return new ResponseEntity<>(taskService.fetchTaskDtoById(uuid), HttpStatus.OK);
     }

@@ -24,13 +24,13 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseMessageDto> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<ResponseMessageDto> deleteEmployeeById(@PathVariable Long id) {
         log.info("вызов метода deleteEmployee id = '{}'", id);
         return new ResponseEntity<>(employeeService.deleteEmployeeById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<EmployeeDto>> allEmployee() {
+    public ResponseEntity<List<EmployeeDto>> fetchAllEmployees() {
         log.info("вызов метода allEmployee");
         return new ResponseEntity<>(employeeService.fetchEmployeeAll(), HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<List<ResponseEmployeeMessagesDto>> createListEmployee(@RequestBody List<EmployeeDto> listEmployeeDto) {
+    public ResponseEntity<List<ResponseEmployeeMessagesDto>> createListEmployees(@RequestBody List<EmployeeDto> listEmployeeDto) {
         log.info("вызов метода createListEmployee");
         List<ResponseEmployeeMessagesDto> listResponseEmployeeMessagesDto = new ArrayList<>();
         for (EmployeeDto employeeDto : listEmployeeDto) {

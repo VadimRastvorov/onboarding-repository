@@ -1,6 +1,7 @@
 package ru.onbording.employeeservice;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,12 +14,15 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
-@Testcontainers
+//@Testcontainers
 @ContextConfiguration(initializers = DatabaseTest.DataSourceInitializer.class)
 @TestPropertySource("/application.properties")
 public class DatabaseTest {
-
-    @Container
+    @BeforeAll
+    static void init() {
+        database.start();
+    }
+    //@Container
     private static final PostgreSQLContainer<?> database =
             new PostgreSQLContainer<>("postgres:14")
                     .withInitScript("init_script.sql")

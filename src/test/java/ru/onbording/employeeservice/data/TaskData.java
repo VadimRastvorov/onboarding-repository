@@ -13,7 +13,7 @@ public class TaskData {
                 .build();
     }
 
-    public static Task createTaskToUpInsert(){
+    public static Task createTaskToInsert(){
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .description("task_1_employee_4")
@@ -23,7 +23,7 @@ public class TaskData {
 
     public static TaskDto createTaskDtoToUpdate(){
         return TaskDto.builder()
-                .uuid("31249236-7681-426f-880c-a6fac2adbc9e")
+                .uuid("b30cb4db-8595-43f8-99f3-c0544030300e")
                 .description("task_1_employee_4")
                 .employeeId("4")
                 .build();

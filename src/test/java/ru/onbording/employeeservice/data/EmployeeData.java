@@ -7,6 +7,7 @@ import ru.onbording.employeeservice.type.Position;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeData {
 
@@ -114,5 +115,14 @@ public class EmployeeData {
                 .position(Position.ACCOUNTANT.name())
                 .description("ACCOUNTANT")
                 .build();
+    }
+
+    public static List<EmployeeDto> createDataEmployeeDtoListToInsert()
+    {
+        List<EmployeeDto> employeeDtoList = new ArrayList<>();
+        employeeDtoList.add(EmployeeData.createDataEmployeeDtoToInsert());
+        employeeDtoList.add(EmployeeData.createDataEmployeeDtoToInsert());
+        employeeDtoList.add(EmployeeData.createDataEmployeeDtoToInsert());
+        return employeeDtoList;
     }
 }
