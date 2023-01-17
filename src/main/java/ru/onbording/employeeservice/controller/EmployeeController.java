@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.onbording.employeeservice.controller.dto.EmployeeDto;
-import ru.onbording.employeeservice.controller.dto.ResponseEmployeeMessagesDto;
-import ru.onbording.employeeservice.controller.dto.ResponseMessageDto;
+import ru.onbording.employeeservice.dto.EmployeeDto;
+import ru.onbording.employeeservice.dto.ResponseEmployeeMessagesDto;
+import ru.onbording.employeeservice.dto.ResponseMessageDto;
 import ru.onbording.employeeservice.service.EmployeeService;
-import ru.onbording.employeeservice.service.MappingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,9 @@ public class EmployeeController {
     @Autowired
     private final EmployeeService employeeService;
 
-    @Autowired
-    private final MappingService mappingService; //todo не используется?
-
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessageDto> deleteEmployee(@PathVariable Long id) {
-        log.info("вызов метода deleteEmployee"); //todo желательно в логи записывать параметры запроса, в данном случае id
+        log.info("вызов метода deleteEmployee id = '{}'", id);
         return new ResponseEntity<>(employeeService.deleteEmployeeById(id), HttpStatus.OK);
     }
 
@@ -40,14 +36,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeId(@PathVariable Long id) { //todo fetchEmployeeById
-        log.info("вызов метода getEmployeeId");
-        return new ResponseEntity<>(employeeService.fetchEmployeeById(id), HttpStatus.OK);
+    public ResponseEntity<EmployeeDto> fetchEmployeeById(@PathVariable Long id) {
+        log.info("вызов метода getEmployeeId id = '{}'", id);
+        return new ResponseEntity<>(employeeService.fetchEmployeeDtoById(id), HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<ResponseEmployeeMessagesDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
-        log.info("вызов метода createEmployee");
+        log.info("вызов метода createEmployee {}", employeeDto.toString());
         return new ResponseEntity<>(employeeService.saveEmployee(
                 employeeDto), HttpStatus.OK);
     }
@@ -65,7 +61,7 @@ public class EmployeeController {
 
     @PutMapping()
     public ResponseEntity<ResponseEmployeeMessagesDto> updateEmployee(@RequestBody EmployeeDto employeeDto) {
-        log.info("вызов метода updateEmployee");
+        log.info("вызов метода updateEmployee {}", employeeDto.toString());
         return new ResponseEntity<>(employeeService.updateEmployee(
                 employeeDto), HttpStatus.OK);
     }

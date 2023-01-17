@@ -18,8 +18,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <org.awaitility.version>4.2.0</org.awaitility.version>
-        <org.flywaydb.version>9.10.2</org.flywaydb.version>
+        <org.flywaydb.version>9.11.0</org.flywaydb.version>
         <org.slf4j.version>2.0.5</org.slf4j.version>
+        <org.testcontainers.version>1.17.6</org.testcontainers.version>
     </properties>
     <dependencies>
         <dependency>
@@ -70,7 +71,40 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${org.testcontainers.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.xmlunit</groupId>
+        <artifactId>xmlunit-core</artifactId>
+    </dependency>
+</dependencies>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers-bom</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
     </dependencies>
+</dependencyManagement>
     <build>
         <plugins>
             <plugin>
@@ -83,31 +117,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/postgres</url>
-                    <user>postgres</user>
-                    <password>postgres</password>
-                    <baselineOnMigrate>true</baselineOnMigrate>
-                    <schemas>public</schemas>
-                    <locations>
-                        <location>
-                            filesystem:src/main/resources/db/migration
-                        </location>
-                    </locations>
                 </configuration>
             </plugin>
         </plugins>

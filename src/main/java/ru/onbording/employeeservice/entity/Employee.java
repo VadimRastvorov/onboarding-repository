@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -53,8 +54,9 @@ public class Employee {
     private String description;
 
     @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.REMOVE,
+            //orphanRemoval = true,
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private List<EmployeeTask> employeeTasks;
+    private List<Task> tasks = new ArrayList<Task>();
 }

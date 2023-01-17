@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.controller.dto;
+package ru.onbording.employeeservice.dto;
 
 import lombok.Builder;
 import lombok.Data;

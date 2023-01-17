@@ -1,59 +1,94 @@
 package ru.onbording.employeeservice.service;
 
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
-import ru.onbording.employeeservice.controller.dto.EmployeeDto;
-import ru.onbording.employeeservice.controller.dto.Gender;
-import ru.onbording.employeeservice.controller.dto.Position;
-import ru.onbording.employeeservice.repository.EmployeeTaskRepository;
+import ru.onbording.employeeservice.dto.EmployeeDto;
+import ru.onbording.employeeservice.repository.TaskRepository;
+import ru.onbording.employeeservice.type.Gender;
+import ru.onbording.employeeservice.type.Position;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class EmployeeValidationService { //todo должен быть бином //done
+public class EmployeeValidationService {
 
     @Autowired
-    private final EmployeeTaskRepository employeeTaskRepository;
+    private final TaskRepository taskRepository;
 
     public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше
 
         List<String> messages = new ArrayList<>();
 
-        if (employeeDto.getEndDate() != null && employeeDto.getStartDate().isAfter(employeeDto.getEndDate())) {
-            messages.add(MessageBundleConfig.getMessageBundleValue("employee.endDate")); //todo текст для пользователя желательно вынести из кода, посмотри ResourceBundle
+        if (checkWorkPeriod(employeeDto.getStartDate(), employeeDto.getEndDate())) {
+            messages.add(MessageBundleConfig.getMessage("employee.endDate"));
         }
-        if (employeeDto.getGender() != null && checkGender(employeeDto.getGender())) {
-            messages.add(MessageBundleConfig.getMessageBundleValue("employee.gender"));
+        if (checkGender(employeeDto.getGender())) {
+            messages.add(MessageBundleConfig.getMessage("employee.gender"));
         }
-        if (!(employeeDto.getSalary() == null && employeeDto.getPosition() == null)
-                && checkSalary(employeeDto.getSalary(), employeeDto.getPosition())) {
-            messages.add(String.format(
-                    MessageBundleConfig.getMessageBundleValue("employee.salary"),
-                    employeeDto.getSalary(),
-                    employeeDto.getPosition()));
+        if (checkSalary(employeeDto.getSalary(), employeeDto.getPosition())) {
+            messages.add(MessageBundleConfig.getMessage("employee.salary", employeeDto.getSalary(), employeeDto.getPosition()));
         }
         if (checkPhone(employeeDto.getPhone())) {
-            messages.add(String.format(MessageBundleConfig.getMessageBundleValue("employee.phone"), employeeDto.getPhone()));
+            messages.add(MessageBundleConfig.getMessage("employee.phone", employeeDto.getPhone()));
         }
-        if (!Position.checkTasks(employeeTaskRepository.countTasksByEmployeeId(employeeDto.getId()), employeeDto.getPosition())) {
-            messages.add(String.format(MessageBundleConfig.getMessageBundleValue("task.taskCount")));
+        if (checkTasks(employeeDto.getId(), employeeDto.getPosition())) {
+            messages.add(MessageBundleConfig.getMessage("task.taskCount"));
         }
         return messages;
     }
 
+    private boolean checkWorkPeriod(String startDate, String endDate) {
+        if (Strings.isEmpty(endDate) || Strings.isEmpty(startDate)) {
+            return false;
+        }
+        return LocalDate.parse(startDate).isAfter(LocalDate.parse(endDate));
+    }
+
     private boolean checkGender(String gender) {
-        return !Gender.checkValue(gender);
+        for (Gender env : Gender.values()) {
+            if (env.name().equals(gender)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean checkPhone(String phone) {
         return !(phone == null || phone.matches("\\d{11}"));
     }
 
-    private boolean checkSalary(double salary, String position) { //todo куча магических слов и чисел, стоит всё вынести в один enum // done
-        return !Position.checkValue(position, salary);
+    private boolean checkSalary(String salary, String position) {
+        if (Strings.isEmpty(salary) && Strings.isEmpty(position)) {
+            return false;
+        }
+        if (Strings.isEmpty(salary)) {
+            return true;
+        }
+        double salaryDouble = Double.parseDouble(salary);
+        for (Position env : Position.values()) {
+            if (env.name().equals(position)) {
+                return !(env.getSalaryMax() >= salaryDouble && env.getSalaryMin() <= salaryDouble);
+            }
+        }
+        return true;
+    }
+
+    private boolean checkTasks(Long id, String position) {
+        if (id == null) {
+            return false;
+        }
+        int tasksCount = taskRepository.countTasksByEmployeeId(id);
+        for (Position env : Position.values()) {
+            if (env.name().equals(position)) {
+                return !(tasksCount <= env.getTasksMax());
+            }
+        }
+        return true;
     }
 }

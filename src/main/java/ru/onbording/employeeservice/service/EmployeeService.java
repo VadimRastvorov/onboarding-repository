@@ -1,20 +1,26 @@
 package ru.onbording.employeeservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
-import ru.onbording.employeeservice.controller.dto.EmployeeDto;
-import ru.onbording.employeeservice.controller.dto.ResponseEmployeeMessagesDto;
-import ru.onbording.employeeservice.controller.dto.ResponseMessageDto;
+import ru.onbording.employeeservice.dto.EmployeeDto;
+import ru.onbording.employeeservice.dto.ResponseEmployeeMessagesDto;
+import ru.onbording.employeeservice.dto.ResponseMessageDto;
+import ru.onbording.employeeservice.dto.TaskDto;
 import ru.onbording.employeeservice.entity.Employee;
+import ru.onbording.employeeservice.entity.Task;
+import ru.onbording.employeeservice.exception.ResourceNotFoundException;
+import ru.onbording.employeeservice.mapper.Mapper;
 import ru.onbording.employeeservice.repository.EmployeeRepository;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Transactional
+@Slf4j
 @AllArgsConstructor
 @Service
 public class EmployeeService {
@@ -25,61 +31,103 @@ public class EmployeeService {
     private final EmployeeValidationService employeeValidationService;
 
     @Autowired
-    private final MappingService mappingService;
+    private final Mapper<Employee, EmployeeDto> employeeMapper;
 
-    public EmployeeDto fetchEmployeeById(Long id) {
-        return mappingService.employeeToEmployeeDto(employeeRepository.findById(id).orElseThrow()); //todo всё таки не хватает ответа при отсутствии такого id
+    @Autowired
+    private final Mapper<Task, TaskDto> taskMapper;
+
+    public EmployeeDto fetchEmployeeDtoById(Long id) {
+        return employeeMapper.entityToDto(fetchEmployeeById(id));
     }
 
     public ResponseEmployeeMessagesDto saveEmployee(EmployeeDto employeeDto) {
         List<String> messages = employeeValidationService.checkData(employeeDto);
-        if (messages.size() == 0) {
-            Employee employee = employeeRepository.save(mappingService.employeeDtoToEmployee(employeeDto));
-            messages.add(String.format(
-                    MessageBundleConfig.getMessageBundleValue("employee.addRow"),
-                    employee.getId()));
-            employeeDto = mappingService.employeeToEmployeeDto(employee); //todo желательно полученные параметры не менять в процессе, лучше создавать новые
+        if (messages.size() > 0) {
+            return createResponseEmployeeMessagesDto(employeeDto, messages);
         }
-        return mappingService.listStringToResponseEmployeeMessagesDto(messages,
-                employeeDto);
+        Employee employee = employeeRepository.save(employeeMapper.dtoToEntity(employeeDto));
+        messages.add(MessageBundleConfig.getMessage("employee.addRow", employee.getId()));
+        return createResponseEmployeeMessagesDto(employeeMapper.entityToDto(employee), messages);
     }
 
     public ResponseEmployeeMessagesDto updateEmployee(EmployeeDto employeeDto) {
         List<String> messages = employeeValidationService.checkData(employeeDto);
-        Employee employee = employeeRepository.findById(employeeDto.getId()).orElseThrow();
-        if (messages.size() == 0) {
-            employee = employeeRepository.save(mappingService.employeeDtoToEmployeeUpdate(employeeDto,
-                    employee));
-            messages.add(String.format(
-                    MessageBundleConfig.getMessageBundleValue("employee.updateRow"),
-                    employee.getId()));
-            employeeDto = mappingService.employeeToEmployeeDto(employee); //todo тут убери, получилось дублирование
+        if (messages.size() > 0) {
+            return createResponseEmployeeMessagesDto
+                    (employeeMapper.entityToDto(fetchEmployeeById(employeeDto.getId())), messages);
         }
-        //todo желательно полученные параметры не менять в процессе, лучше создавать новые
-        employeeDto = mappingService.employeeToEmployeeDto(employee); //todo вот тут повторное выполнение действия выше
-        return mappingService.listStringToResponseEmployeeMessagesDto(messages,
-                employeeDto);
+        Employee employee = employeeRepository.save(getEmployeeByEmployeeDto(employeeDto));
+        messages.add(MessageBundleConfig.getMessage("employee.updateRow", employeeDto.getId()));
+        return createResponseEmployeeMessagesDto(employeeMapper.entityToDto(employee), messages);
     }
 
     public List<EmployeeDto> fetchEmployeeAll() {
         return employeeRepository.findAllByOrderByIdAsc()
                 .stream()
-                .map(employee -> {
-                    return mappingService.employeeToEmployeeDto(employee); //todo idea подсказывает как сделать красивее)
-                })
+                .map(employeeMapper::entityToDto)
                 .collect(Collectors.toList());
     }
 
     public ResponseMessageDto deleteEmployeeById(Long id) {
-        employeeRepository.deleteEmployeeById(id);
+        employeeRepository.delete(fetchEmployeeById(id));
         return ResponseMessageDto
                 .builder()
-                .message(String.format(
-                        MessageBundleConfig.getMessageBundleValue("employee.deleteRow"), id))
+                .message(MessageBundleConfig.getMessage("employee.deleteRow", id))
                 .build();
     }
 
     public void deleteOneRowEmployee() {
         employeeRepository.deleteEmployee();
+    }
+
+    public Employee fetchEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    private ResponseEmployeeMessagesDto createResponseEmployeeMessagesDto
+            (EmployeeDto employeeDto, List<String> messages) {
+        return ResponseEmployeeMessagesDto.builder()
+                .employeeDto(employeeDto)
+                .messages(messages.stream()
+                        .map(this::createResponseMessageDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private ResponseMessageDto createResponseMessageDto(String message) {
+        return ResponseMessageDto.builder()
+                .message(message)
+                .build();
+    }
+
+    private <T> T getValOrDefault(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
+
+    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {
+        Employee employee = fetchEmployeeById(employeeDto.getId());
+        List<Task> taskList = employee.getTasks();
+        employee = Employee.builder()
+                .id(employee.getId())
+                .birthday(Objects.nonNull(employeeDto.getBirthday()) ?
+                        LocalDate.parse(employeeDto.getBirthday()) : employee.getBirthday())
+                .gender(getValOrDefault(employeeDto.getGender(), employee.getGender()))
+                .phone(getValOrDefault(employeeDto.getPhone(), employee.getPhone()))
+                .lastName(getValOrDefault(employeeDto.getLastName(), employee.getLastName()))
+                .firstName(getValOrDefault(employeeDto.getFirstName(), employee.getFirstName()))
+                .middleName(getValOrDefault(employeeDto.getMiddleName(), employee.getMiddleName()))
+                .position(getValOrDefault(employeeDto.getPosition(), employee.getPosition()))
+                .description(getValOrDefault(employeeDto.getDescription(), employeeDto.getDescription()))
+                .endDate(Objects.nonNull(employeeDto.getEndDate()) ?
+                        LocalDate.parse(employeeDto.getEndDate()) : employee.getEndDate())
+                .startDate(Objects.nonNull(employeeDto.getStartDate()) ?
+                        LocalDate.parse(employeeDto.getStartDate()) : employee.getStartDate())
+                .salary(Objects.nonNull(employeeDto.getSalary()) ?
+                        Double.parseDouble(employeeDto.getSalary()) : employee.getSalary())
+                .build();
+        //employee.getTasks().clear();
+        //employee.getTasks().addAll(taskList);
+        return employee;
     }
 }
