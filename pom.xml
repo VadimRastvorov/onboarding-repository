@@ -23,6 +23,7 @@
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
     </properties>
     <dependencies>
+<!--        todo а где slf4j + logback ?-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -63,13 +64,13 @@
         </dependency>
         <dependency>
             <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
+            <artifactId>awaitility</artifactId>  <!-- todo разве тебе это нужно?-->
             <version>${org.awaitility.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <artifactId>spring-boot-starter-log4j2</artifactId> <!-- todo это убери вместо него нужно использовать slf4j-->
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -91,7 +92,7 @@
     </dependency>
     <dependency>
         <groupId>org.xmlunit</groupId>
-        <artifactId>xmlunit-core</artifactId>
+        <artifactId>xmlunit-core</artifactId>  <!-- todo разве тебе это нужно?-->
     </dependency>
 </dependencies>
 <dependencyManagement>

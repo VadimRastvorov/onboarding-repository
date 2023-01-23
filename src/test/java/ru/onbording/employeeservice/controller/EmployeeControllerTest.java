@@ -1,5 +1,6 @@
 package ru.onbording.employeeservice.controller;
 
+//todo ctrl+O ?
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id)); //todo стоит проверять не только id, а всю сущность EmployeeDto
     }
 
     @Test
@@ -49,7 +50,7 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").isNotEmpty());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").isNotEmpty()); //todo почему бы не сравнить с заранее подготовленным List<EmployeeDto>
     }
 
     @Test
@@ -60,9 +61,9 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists()) //todo так же можно сравнить весь EmployeeDto, а чтоб исключить рандом в UUID передать его при отправке
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message").isNotEmpty());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message").isNotEmpty()); //todo наверное ты ожидаешь определённый ответ, а не просто не пустой
     }
 
     @Test
@@ -73,9 +74,9 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].employeeDto").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].employeeDto").exists()) //todo сравни с заранее подготовленной сущностью
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].messages").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].messages[*].message").isNotEmpty());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].messages[*].message").isNotEmpty()); //todo наверное ты ожидаешь определённый ответ, а не просто не пустой
     }
 
     @Test
@@ -86,12 +87,12 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists()) //todo сравни с заранее подготовленной сущностью
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message").isNotEmpty());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message").isNotEmpty()); //todo наверное ты ожидаешь определённый ответ, а не просто не пустой
     }
 
-    public static String asJsonString(final Object obj) {
+    public static String asJsonString(final Object obj) { //todo такой метод нужно перенести в отдельный класс - TestUtils
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {

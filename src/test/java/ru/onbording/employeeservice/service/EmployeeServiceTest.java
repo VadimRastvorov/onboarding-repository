@@ -23,14 +23,14 @@ public class EmployeeServiceTest extends DatabaseTest {
     private EmployeeService employeeService;
 
     @Test
-    void testFetchEmployeeALl() {
+    void testFetchEmployeeALl() { //todo результат сравни с заранее подготовленным списком
         List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
         assertThat(employeeDtoList).isNotNull();
         //assertThat(employeeDtoList.size()).isEqualTo(6);
     }
 
     @Test
-    void testFetchEmployeeByIdWithValidId() {
+    void testFetchEmployeeByIdWithValidId() { //todo результат сравни с заранее подготовленной сущностью
         Employee employee = employeeService.fetchEmployeeById(employeeService.fetchEmployeeAll().get(0).getId());
         assertThat(employee).isNotNull();
     }
@@ -45,7 +45,7 @@ public class EmployeeServiceTest extends DatabaseTest {
     }
 
     @Test
-    void testSaveEmployee() {
+    void testSaveEmployee() { //todo дополнительно результат сравни с заранее подготовленной сущностью
         ResponseEmployeeMessagesDto responseEmployeeMessagesDto =
                 employeeService.saveEmployee(EmployeeData.createDataEmployeeDtoToInsert());
         assertThat(responseEmployeeMessagesDto.getMessages().get(0).getMessage())
@@ -54,7 +54,7 @@ public class EmployeeServiceTest extends DatabaseTest {
     }
 
     @Test
-    void testUpdateEmployee() {
+    void testUpdateEmployee() { //todo дополнительно результат сравни с заранее подготовленной сущностью
         EmployeeDto employeeDto = EmployeeData.createDataEmployeeDtoToUpdate();
         ResponseEmployeeMessagesDto responseEmployeeMessagesDto =
                 employeeService.updateEmployee(employeeDto);

@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class EmployeeValidationServiceTest extends DatabaseTest {
     @Autowired
     EmployeeValidationService employeeValidationService;
-
+    //todo не хватает теста всех остальных сценариев, тогда когда поля не валидны
     @Test
     void testCheckDataValidCheck() {
         List<String> messages = employeeValidationService.checkData(EmployeeData.createDataEmployeeDto());

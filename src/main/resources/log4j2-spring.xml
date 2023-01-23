@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--todo название файла не соответствует тому, что тут находится, обычно файл называют logback.xml . Возможно вид настроек поменяется, ибо это для log4j2-->
 <Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
@@ -6,6 +7,7 @@
                     pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
         </Console>
 
+        <!--todo название файла лога не соответствует твоему сервису-->
         <RollingFile name="RollingFile"
                      fileName="./logs/spring-boot-logger-log4j2.log"
                      filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz">

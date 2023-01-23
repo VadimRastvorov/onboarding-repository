@@ -25,8 +25,8 @@ public class DatabaseTest {
     //@Container
     private static final PostgreSQLContainer<?> database =
             new PostgreSQLContainer<>("postgres:14")
-                    .withInitScript("init_script.sql")
-                    .waitingFor(Wait.forListeningPort());
+                    .withInitScript("init_script.sql") //todo лучше скрипт использовать не при создании контейнера, а перед запуском тестов (над классами например) с помощью аннотации @Sql
+                    .waitingFor(Wait.forListeningPort()); //todo не думаю что эта настройка прям нужна)
 
     public static class DataSourceInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         @Override

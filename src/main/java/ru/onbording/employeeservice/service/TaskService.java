@@ -36,7 +36,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public TaskDto fetchTaskDtoById(String uuid) {
-        log.info("вызов метода TaskService.fetchTaskById, id запрашиваемой записи {}", uuid);
+        log.info("вызов метода TaskService.fetchTaskById, id запрашиваемой записи {}", uuid); //todo по идеи эти логи о вызовах методов не нужны, ведь есть в контроллере
         return taskMapper.entityToDto(fetchTaskById(UUID.fromString(uuid)));
     }
 

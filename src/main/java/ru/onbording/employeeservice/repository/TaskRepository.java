@@ -18,7 +18,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
     @Modifying
     @Query(value = "UPDATE tasks SET description = :description WHERE id = :id",
             nativeQuery = true)
-    void updateTaskDescriptionById(@Param("id") UUID id, @Param("description") String description);
+    void updateTaskDescriptionById(@Param("id") UUID id, @Param("description") String description); //todo не используется?
 
     @Query(value = "SELECT COUNT(*) FROM public.tasks WHERE employee_id = :employeeId",
             nativeQuery = true)

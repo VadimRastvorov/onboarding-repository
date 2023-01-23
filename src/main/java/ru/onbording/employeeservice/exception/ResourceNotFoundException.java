@@ -17,5 +17,5 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String message) {
         super(message);
-    }
+    } //todo не используется?
 }

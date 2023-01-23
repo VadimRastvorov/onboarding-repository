@@ -21,7 +21,7 @@ public class TaskControllerTest extends DatabaseTest {
 
     @Autowired
     private MockMvc mvc;
-
+//todo те же замечания, что и в EmployeeControllerTest
     @Test
     void testFetchTaskById() throws Exception {
         String uuid = "631e0556-8f3a-4e58-9039-4e61fcba217a";

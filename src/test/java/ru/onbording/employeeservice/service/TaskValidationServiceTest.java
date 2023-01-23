@@ -12,6 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class TaskValidationServiceTest extends DatabaseTest {
     @Autowired
     TaskValidationService taskValidationService;
+    //todo не хватает теста всех остальных сценариев, тогда когда поля не валидны
     @Test
     void testCheckDataValidCheck()
     {

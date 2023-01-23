@@ -22,7 +22,7 @@ public class EmployeeMapperImplTest {
     private EmployeeMapperImpl employeeMapper;
 
     @Test
-    void testMapperEmployeeEntityToDto() {
+    void testMapperEmployeeEntityToDto() { //todo результат сравни с заранее подготовленной сущностью
         Employee entity = EmployeeData.createDataEmployee();
 
         EmployeeDto dto = employeeMapper.entityToDto(entity);
@@ -43,7 +43,7 @@ public class EmployeeMapperImplTest {
     }
 
     @Test
-    void testMapperTaskDtoToEntity() {
+    void testMapperTaskDtoToEntity() { //todo результат сравни с заранее подготовленной сущностью
         EmployeeDto dto = EmployeeData.createDataEmployeeDto();
 
         Employee entity = employeeMapper.dtoToEntity(dto);

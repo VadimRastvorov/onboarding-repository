@@ -10,7 +10,7 @@ public class MessageBundleConfig {
 
     public static String getMessageBundleValue(String key) {
         return bundle.getString(key);
-    }
+    } //todo не используется?
 
     public static String getMessage(String key, Object ... arg){
         return String.format(bundle.getString(key), arg);

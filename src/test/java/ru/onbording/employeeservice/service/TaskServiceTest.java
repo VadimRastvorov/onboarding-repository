@@ -17,6 +17,7 @@ public class TaskServiceTest extends DatabaseTest {
     @Autowired
     private TaskService taskService;
 
+//todo те же замечания, что и в EmployeeServiceTest
     @Test
     void testFetchTaskDtoById() {
         TaskDto taskDto = taskService.fetchTaskDtoById(taskService.fetchTaskAll().get(0).getUuid());

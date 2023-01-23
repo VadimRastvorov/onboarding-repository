@@ -34,7 +34,7 @@ public class EmployeeService {
     private final Mapper<Employee, EmployeeDto> employeeMapper;
 
     @Autowired
-    private final Mapper<Task, TaskDto> taskMapper;
+    private final Mapper<Task, TaskDto> taskMapper; //todo не используется?
 
     public EmployeeDto fetchEmployeeDtoById(Long id) {
         return employeeMapper.entityToDto(fetchEmployeeById(id));
@@ -105,9 +105,9 @@ public class EmployeeService {
         return value != null ? value : defaultValue;
     }
 
-    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {
+    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {  //todo лучше перед апдейтом EmployeeDto замаппить в Employee, дабы не заниматься парсингом тут
         Employee employee = fetchEmployeeById(employeeDto.getId());
-        List<Task> taskList = employee.getTasks();
+        List<Task> taskList = employee.getTasks(); //todo не используется?
         employee = Employee.builder()
                 .id(employee.getId())
                 .birthday(Objects.nonNull(employeeDto.getBirthday()) ?

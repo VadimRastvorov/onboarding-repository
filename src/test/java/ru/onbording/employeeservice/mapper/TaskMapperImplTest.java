@@ -21,7 +21,7 @@ public class TaskMapperImplTest {
     private TaskMapperImpl taskMapper;
 
     @Test
-    void testMapperTaskEntityToDto() {
+    void testMapperTaskEntityToDto() { //todo результат сравни с заранее подготовленной сущностью
         UUID uuid = UUID.randomUUID();
         Task entity = Task.builder()
                 .uuid(uuid)
@@ -36,7 +36,7 @@ public class TaskMapperImplTest {
     }
 
     @Test
-    void testMapperTaskDtoToEntity() {
+    void testMapperTaskDtoToEntity() { //todo результат сравни с заранее подготовленной сущностью
         TaskDto dto = TaskDto.builder()
                 .description("Test")
                 .employeeId("1")
