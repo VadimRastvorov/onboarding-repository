@@ -1,9 +1,7 @@
 package ru.onbording.employeeservice.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.dto.EmployeeDto;
@@ -34,25 +32,25 @@ public class EmployeeValidationService {
 
     private void checkRequiredData(List<String> messages, EmployeeDto employeeDto) {
         if (objectIsNull(employeeDto.getGender()) || employeeDto.getGender().isEmpty()) {
-            fillRequiredData(messages,"gender");
+            fillRequiredData(messages, "gender");
         }
         if (objectIsNull(employeeDto.getPosition()) || employeeDto.getPosition().isEmpty()) {
-            fillRequiredData(messages,"position");
+            fillRequiredData(messages, "position");
         }
         if (objectIsNull(employeeDto.getSalary()) || employeeDto.getSalary().isEmpty()) {
-            fillRequiredData(messages,"salary");
+            fillRequiredData(messages, "salary");
         }
         if (objectIsNull(employeeDto.getLastName()) || employeeDto.getLastName().isEmpty()) {
-            fillRequiredData(messages,"lastName");
+            fillRequiredData(messages, "lastName");
         }
         if (objectIsNull(employeeDto.getFirstName()) || employeeDto.getFirstName().isEmpty()) {
-            fillRequiredData(messages,"firstName");
+            fillRequiredData(messages, "firstName");
         }
         if (objectIsNull(employeeDto.getBirthday()) || employeeDto.getBirthday().isEmpty()) {
-            fillRequiredData(messages,"birthday");
+            fillRequiredData(messages, "birthday");
         }
         if (objectIsNull(employeeDto.getStartDate()) || employeeDto.getStartDate().isEmpty()) {
-            fillRequiredData(messages,"startDate");
+            fillRequiredData(messages, "startDate");
         }
     }
 
@@ -78,7 +76,7 @@ public class EmployeeValidationService {
     }
 
     private void checkWorkPeriod(List<String> messages, EmployeeDto employeeDto) {
-        if (objectIsNull(employeeDto.getEndDate()) || Strings.isEmpty(employeeDto.getEndDate())) {
+        if (objectIsNull(employeeDto.getEndDate()) || employeeDto.getEndDate().isEmpty()) {
             return;
         }
         if (LocalDate.parse(employeeDto.getStartDate()).isAfter(LocalDate.parse(employeeDto.getEndDate()))) {
@@ -130,10 +128,10 @@ public class EmployeeValidationService {
     }
 
     private boolean checkSalary(String salary, String position) {
-        if (Strings.isEmpty(salary) && Strings.isEmpty(position)) {
+        if (salary.isEmpty() && position.isEmpty()) {
             return false;
         }
-        if (Strings.isEmpty(salary)) {
+        if (salary.isEmpty()) {
             return true;
         }
         double salaryDouble = Double.parseDouble(salary);

@@ -8,7 +8,6 @@ import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.dto.ResponseMessageDto;
 import ru.onbording.employeeservice.dto.ResponseTaskMessagesDto;
 import ru.onbording.employeeservice.dto.TaskDto;
-import ru.onbording.employeeservice.entity.Employee;
 import ru.onbording.employeeservice.entity.Task;
 import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import ru.onbording.employeeservice.mapper.Mapper;
@@ -26,9 +25,6 @@ public class TaskService {
 
     @Autowired
     private final Mapper<Task, TaskDto> taskMapper;
-
-    @Autowired
-    private final EmployeeService employeeService;
 
     @Autowired
     private final TaskValidationService taskValidationService;

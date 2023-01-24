@@ -1,6 +1,5 @@
 package ru.onbording.employeeservice.service;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.onbording.employeeservice.DatabaseTest;
@@ -16,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-@AllArgsConstructor
+
 public class EmployeeServiceTest extends DatabaseTest {
 
     @Autowired

@@ -23,7 +23,7 @@ public class SchedulerConfig {
     public void deleteEmployee() {
         LocalDateTime start = LocalDateTime.now();
         log.info("Запуск шедулера удаления записи из БД");
-        //employeeService.deleteOneRowEmployee();
+        employeeService.deleteOneRowEmployee();
         LocalDateTime end = LocalDateTime.now();
         log.info("Завершение шедулера удаления записи из БД. Время выполнения в секундах: {}",
                 end.toEpochSecond(ZoneOffset.UTC) - start.toEpochSecond(ZoneOffset.UTC));

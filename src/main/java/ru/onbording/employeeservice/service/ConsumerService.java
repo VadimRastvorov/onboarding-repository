@@ -1,5 +1,6 @@
 package ru.onbording.employeeservice.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,11 +9,12 @@ import ru.onbording.employeeservice.dto.EmployeeDto;
 import ru.onbording.employeeservice.dto.TaskDto;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class ConsumerService {
 
     @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     @Autowired
     private TaskService taskService;

@@ -9,7 +9,7 @@ import ru.onbording.employeeservice.repository.TaskRepository;
 import ru.onbording.employeeservice.type.Position;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,7 +20,7 @@ public class TaskValidationService {
 
     public List<String> checkData(TaskDto taskDto) {
         if (checkTaskParamEmployee(taskDto.getEmployeeId())) {
-            return Arrays.asList(MessageBundleConfig.getMessage("task.checkEmployeeId"));
+            return Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployeeId"));
         }
 
         List<String> messages = new ArrayList<>();
@@ -28,7 +28,7 @@ public class TaskValidationService {
         String position = taskRepository.fetchPositionByEmployeeId(taskEmployeeId);
 
         if (checkTaskEmployeePosition(position)) {
-            return Arrays.asList(MessageBundleConfig.getMessage("task.checkEmployee", taskEmployeeId));
+            return Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployee", taskEmployeeId));
         }
 
         if (checkTasksCount(taskEmployeeId, position)) {

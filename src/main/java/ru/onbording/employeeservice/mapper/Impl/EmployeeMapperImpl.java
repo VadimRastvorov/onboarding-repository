@@ -1,6 +1,5 @@
 package ru.onbording.employeeservice.mapper.Impl;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.dto.EmployeeDto;
 import ru.onbording.employeeservice.entity.Employee;
@@ -49,7 +48,7 @@ public class EmployeeMapperImpl implements Mapper<Employee, EmployeeDto> {
     }
 
     private LocalDate getLocalDate(String date) {
-        if (Strings.isBlank(date)) {
+        if (date.isBlank()) {
             return null;
         }
         return LocalDate.parse(date);
