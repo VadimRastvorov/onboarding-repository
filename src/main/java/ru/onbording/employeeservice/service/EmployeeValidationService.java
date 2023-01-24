@@ -3,6 +3,7 @@ package ru.onbording.employeeservice.service;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.dto.EmployeeDto;
@@ -22,35 +23,91 @@ public class EmployeeValidationService {
     private final TaskRepository taskRepository;
 
     public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше
-
         List<String> messages = new ArrayList<>();
-
-        if (checkWorkPeriod(employeeDto.getStartDate(), employeeDto.getEndDate())) {
-            messages.add(MessageBundleConfig.getMessage("employee.endDate"));
-        }
-        if (checkGender(employeeDto.getGender())) {
-            messages.add(MessageBundleConfig.getMessage("employee.gender"));
-        }
-        if (checkSalary(employeeDto.getSalary(), employeeDto.getPosition())) {
-            messages.add(MessageBundleConfig.getMessage("employee.salary", employeeDto.getSalary(), employeeDto.getPosition()));
-        }
-        if (checkPhone(employeeDto.getPhone())) {
-            messages.add(MessageBundleConfig.getMessage("employee.phone", employeeDto.getPhone()));
-        }
-        if (checkTasks(employeeDto.getId(), employeeDto.getPosition())) {
-            messages.add(MessageBundleConfig.getMessage("task.taskCount"));
-        }
+        checkRequiredData(messages, employeeDto);
+        checkPosition(messages, employeeDto);
+        checkGender(messages, employeeDto);
+        checkWorkPeriod(messages, employeeDto);
+        checkPhone(messages, employeeDto);
         return messages;
     }
 
-    private boolean checkWorkPeriod(String startDate, String endDate) {
-        if (Strings.isEmpty(endDate) || Strings.isEmpty(startDate)) {
-            return false;
+    private void checkRequiredData(List<String> messages, EmployeeDto employeeDto) {
+        if (objectIsNull(employeeDto.getGender()) || employeeDto.getGender().isEmpty()) {
+            fillRequiredData(messages,"gender");
         }
-        return LocalDate.parse(startDate).isAfter(LocalDate.parse(endDate));
+        if (objectIsNull(employeeDto.getPosition()) || employeeDto.getPosition().isEmpty()) {
+            fillRequiredData(messages,"position");
+        }
+        if (objectIsNull(employeeDto.getSalary()) || employeeDto.getSalary().isEmpty()) {
+            fillRequiredData(messages,"salary");
+        }
+        if (objectIsNull(employeeDto.getLastName()) || employeeDto.getLastName().isEmpty()) {
+            fillRequiredData(messages,"lastName");
+        }
+        if (objectIsNull(employeeDto.getFirstName()) || employeeDto.getFirstName().isEmpty()) {
+            fillRequiredData(messages,"firstName");
+        }
+        if (objectIsNull(employeeDto.getBirthday()) || employeeDto.getBirthday().isEmpty()) {
+            fillRequiredData(messages,"birthday");
+        }
+        if (objectIsNull(employeeDto.getStartDate()) || employeeDto.getStartDate().isEmpty()) {
+            fillRequiredData(messages,"startDate");
+        }
     }
 
-    private boolean checkGender(String gender) {
+    private void checkPosition(List<String> messages, EmployeeDto employeeDto) {
+        if (checkValidPosition(employeeDto.getPosition())) {
+            messages.add(MessageBundleConfig
+                    .getMessage("employee.validPosition", employeeDto.getPosition()));
+        }
+        if (checkTasks(employeeDto.getId(), employeeDto.getPosition())) {
+            messages.add(MessageBundleConfig
+                    .getMessage("task.taskCount"));
+        }
+        if (checkSalary(employeeDto.getSalary(), employeeDto.getPosition())) {
+            messages.add(MessageBundleConfig
+                    .getMessage("employee.salary", employeeDto.getSalary(), employeeDto.getPosition()));
+        }
+    }
+
+    private void checkGender(List<String> messages, EmployeeDto employeeDto) {
+        if (checkValidGender(employeeDto.getGender())) {
+            messages.add(MessageBundleConfig.getMessage("employee.validGender"));
+        }
+    }
+
+    private void checkWorkPeriod(List<String> messages, EmployeeDto employeeDto) {
+        if (objectIsNull(employeeDto.getEndDate()) || Strings.isEmpty(employeeDto.getEndDate())) {
+            return;
+        }
+        if (LocalDate.parse(employeeDto.getStartDate()).isAfter(LocalDate.parse(employeeDto.getEndDate()))) {
+            messages.add(MessageBundleConfig.getMessage("employee.endDate"));
+        }
+    }
+
+    private void checkPhone(List<String> messages, EmployeeDto employeeDto) {
+        if (objectIsNull(employeeDto.getPhone()) || employeeDto.getPhone().isEmpty()) {
+            if (employeeDto.getPosition().equals(Position.DIRECTOR.name())) {
+                messages.add(MessageBundleConfig
+                        .getMessage("employee.phoneDirector", employeeDto.getPosition(), "phone"));
+            }
+        }
+        if (checkValidPhone(employeeDto.getPhone())) {
+            messages.add(MessageBundleConfig
+                    .getMessage("employee.validPhone", employeeDto.getPhone()));
+        }
+    }
+
+    private void fillRequiredData(List<String> messages, String field) {
+        messages.add(MessageBundleConfig.getMessage("employee.checkRequiredData", field));
+    }
+
+    private boolean objectIsNull(Object obj) {
+        return obj == null;
+    }
+
+    private boolean checkValidGender(String gender) {
         for (Gender env : Gender.values()) {
             if (env.name().equals(gender)) {
                 return false;
@@ -59,7 +116,16 @@ public class EmployeeValidationService {
         return true;
     }
 
-    private boolean checkPhone(String phone) {
+    private boolean checkValidPosition(String position) {
+        for (Position env : Position.values()) {
+            if (env.name().equals(position)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkValidPhone(String phone) {
         return !(phone == null || phone.matches("\\d{11}"));
     }
 

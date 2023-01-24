@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.onbording.employeeservice.DatabaseTest;
 import ru.onbording.employeeservice.data.EmployeeData;
+import ru.onbording.employeeservice.data.TaskData;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class TaskValidationServiceTest extends DatabaseTest {
     @Test
     void testCheckDataValidCheck()
     {
-        List<String> messages = taskValidationService.checkData(EmployeeData.createDataEmployee());
+        List<String> messages = taskValidationService.checkData(TaskData.createTaskDtoToInsert());
         assertThat(messages.size()).isEqualTo(0);
     }
 }

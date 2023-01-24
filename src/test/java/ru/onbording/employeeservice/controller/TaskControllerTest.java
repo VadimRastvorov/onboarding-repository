@@ -39,7 +39,8 @@ public class TaskControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Запись удалена " + uuid));
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$.message").value(String.format("Запись удалена '%s'", uuid)));
     }
 
     @Test

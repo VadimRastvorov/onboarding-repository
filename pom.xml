@@ -21,6 +21,7 @@
         <org.flywaydb.version>9.11.0</org.flywaydb.version>
         <org.slf4j.version>2.0.5</org.slf4j.version>
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
+        <org.springframework.kafka.version>2.8.11</org.springframework.kafka.version>
     </properties>
     <dependencies>
         <dependency>
@@ -83,28 +84,38 @@
             <version>${org.testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-    <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>${org.testcontainers.version}</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.xmlunit</groupId>
-        <artifactId>xmlunit-core</artifactId>
-    </dependency>
-</dependencies>
-<dependencyManagement>
-    <dependencies>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-bom</artifactId>
+            <artifactId>postgresql</artifactId>
             <version>${org.testcontainers.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${org.springframework.kafka.version}</version>
         </dependency>
     </dependencies>
-</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${org.testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>

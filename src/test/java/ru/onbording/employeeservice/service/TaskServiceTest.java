@@ -34,7 +34,7 @@ public class TaskServiceTest extends DatabaseTest {
         ResponseTaskMessagesDto responseTaskMessagesDto = taskService.saveTask(TaskData.createTaskDtoToInsert());
         assertThat(responseTaskMessagesDto.getMessages().get(0).getMessage())
                 .isEqualTo(MessageBundleConfig.getMessage("task.addRow",
-                        responseTaskMessagesDto.getTaskDto().getUuid(), "Иванова"));
+                        responseTaskMessagesDto.getTaskDto().getUuid(), "4"));
     }
 
     @Test

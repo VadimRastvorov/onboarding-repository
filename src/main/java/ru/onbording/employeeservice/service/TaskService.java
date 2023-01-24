@@ -14,6 +14,7 @@ import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import ru.onbording.employeeservice.mapper.Mapper;
 import ru.onbording.employeeservice.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,6 +36,9 @@ public class TaskService {
     @Autowired
     private final TaskRepository taskRepository;
 
+    @Autowired
+    private ProducerService producerService;
+
     public TaskDto fetchTaskDtoById(String uuid) {
         log.info("вызов метода TaskService.fetchTaskById, id запрашиваемой записи {}", uuid);
         return taskMapper.entityToDto(fetchTaskById(UUID.fromString(uuid)));
@@ -52,17 +56,30 @@ public class TaskService {
         return taskDtoList;
     }
 
-
     public ResponseTaskMessagesDto saveTask(TaskDto taskDto) {
         log.info("вызов метода TaskService.saveTask {}", taskDto.toString());
-        Employee employee = employeeService.fetchEmployeeById(Long.parseLong(taskDto.getEmployeeId())); //вызов для проверки работника
-        List<String> messages = taskValidationService.checkData(employee);
+        List<String> messages = taskValidationService.checkData(taskDto);
         if (messages.size() > 0) {
             return createResponseTaskMessagesDto(taskDto, messages);
         }
         Task task = taskRepository.save(taskMapper.dtoToEntity(taskDto));
-        messages.add(MessageBundleConfig.getMessage("task.addRow", task.getUuid(), employee.getLastName()));
+        messages.add(MessageBundleConfig.getMessage("task.addRow", task.getUuid(), taskDto.getEmployeeId()));
         return createResponseTaskMessagesDto(taskMapper.entityToDto(task), messages);
+    }
+
+    public List<ResponseTaskMessagesDto> saveTaskList(List<TaskDto> taskDtoList) {
+        log.info("вызов метода TaskService.saveTaskList {}", taskDtoList.toString());
+        List<ResponseTaskMessagesDto> responseTaskMessagesDtoList = new ArrayList<>();
+        for (TaskDto taskDto : taskDtoList) {
+            List<String> messages = taskValidationService.checkData(taskDto);
+            if (messages.size() == 0) {
+                messages.add(MessageBundleConfig
+                        .getMessage("task.addRow", taskDto.getUuid(), taskDto.getEmployeeId()));
+                producerService.produceTask(taskDto);
+            }
+            responseTaskMessagesDtoList.add(createResponseTaskMessagesDto(taskDto, messages));
+        }
+        return responseTaskMessagesDtoList;
     }
 
     public ResponseMessageDto updateTask(TaskDto taskDto) {

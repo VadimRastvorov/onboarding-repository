@@ -1,9 +1,7 @@
 package ru.onbording.employeeservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -40,7 +38,7 @@ public class EmployeeControllerTest extends DatabaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Запись удалена " + id));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(String.format("Запись удалена '%s'", id)));
     }
 
     @Test
