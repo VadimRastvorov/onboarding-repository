@@ -1,5 +1,6 @@
 package ru.onbording.employeeservice.service;
 
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.onbording.employeeservice.DatabaseTest;
@@ -14,9 +15,8 @@ import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+@AllArgsConstructor
 public class EmployeeServiceTest extends DatabaseTest {
 
     @Autowired
@@ -26,7 +26,6 @@ public class EmployeeServiceTest extends DatabaseTest {
     void testFetchEmployeeALl() {
         List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
         assertThat(employeeDtoList).isNotNull();
-        //assertThat(employeeDtoList.size()).isEqualTo(6);
     }
 
     @Test
@@ -39,9 +38,7 @@ public class EmployeeServiceTest extends DatabaseTest {
     void testFetchEmployeeByIdWithOutValidId() {
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.fetchEmployeeById(119L);
-                });
+                () -> employeeService.fetchEmployeeById(119L));
     }
 
     @Test
@@ -72,18 +69,14 @@ public class EmployeeServiceTest extends DatabaseTest {
         assertThat(employeeService.fetchEmployeeAll().size()).isEqualTo(countEmployee - 1);
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.fetchEmployeeById(employeeValidId);
-                });
+                () -> employeeService.fetchEmployeeById(employeeValidId));
     }
 
     @Test
-    void testDeleteEmployeeByIdWithOutValidId() {
+    void testDeleteEmployeeByIdWithInvalidId() {
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.deleteEmployeeById(17L);
-                });
+                () -> employeeService.deleteEmployeeById(17L));
     }
 
     @Test
