@@ -1,7 +1,6 @@
 package ru.onbording.employeeservice.service;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
@@ -12,6 +11,7 @@ import ru.onbording.employeeservice.entity.Employee;
 import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import ru.onbording.employeeservice.mapper.Mapper;
 import ru.onbording.employeeservice.repository.EmployeeRepository;
+import ru.onbording.employeeservice.service.kafka.ProducerService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Slf4j
 @AllArgsConstructor
 @Service
 public class EmployeeService {

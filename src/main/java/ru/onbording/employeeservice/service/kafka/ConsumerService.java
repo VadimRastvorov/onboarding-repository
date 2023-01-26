@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.service;
+package ru.onbording.employeeservice.service.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.dto.EmployeeDto;
 import ru.onbording.employeeservice.dto.TaskDto;
+import ru.onbording.employeeservice.service.EmployeeService;
+import ru.onbording.employeeservice.service.TaskService;
 
 @Slf4j
 @AllArgsConstructor

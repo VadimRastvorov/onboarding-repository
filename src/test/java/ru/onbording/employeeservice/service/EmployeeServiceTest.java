@@ -2,7 +2,8 @@ package ru.onbording.employeeservice.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.onbording.employeeservice.DatabaseTest;
+import org.springframework.test.context.jdbc.Sql;
+import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.data.EmployeeData;
 import ru.onbording.employeeservice.dto.EmployeeDto;
@@ -16,7 +17,8 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class EmployeeServiceTest extends DatabaseTest {
+@Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+public class EmployeeServiceTest extends InitializerTest {
 
     @Autowired
     private EmployeeService employeeService;

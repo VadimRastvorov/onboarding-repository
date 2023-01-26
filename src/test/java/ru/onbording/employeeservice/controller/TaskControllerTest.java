@@ -7,8 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ru.onbording.employeeservice.DatabaseTest;
-import ru.onbording.employeeservice.data.EmployeeData;
+import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.data.TaskData;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-public class TaskControllerTest extends DatabaseTest {
+public class TaskControllerTest extends InitializerTest {
     private static final String URL = "/api/task";
 
     @Autowired

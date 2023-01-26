@@ -15,14 +15,14 @@ public class EmployeeMapperImpl implements Mapper<Employee, EmployeeDto> {
     public Employee dtoToEntity(EmployeeDto dto) {
         return Employee.builder()
                 .id(dto.getId())
-                .birthday(getLocalDate(dto.getBirthday()))
+                .birthday(toLocalDate(dto.getBirthday()))
                 .gender(dto.getGender())
                 .phone(dto.getPhone())
                 .lastName(dto.getLastName())
                 .firstName(dto.getFirstName())
                 .middleName(dto.getMiddleName())
-                .endDate(getLocalDate(dto.getEndDate()))
-                .startDate(getLocalDate(dto.getStartDate()))
+                .endDate(toLocalDate(dto.getEndDate()))
+                .startDate(toLocalDate(dto.getStartDate()))
                 .salary(Double.parseDouble(dto.getSalary()))
                 .position(dto.getPosition())
                 .description(dto.getDescription())
@@ -47,7 +47,7 @@ public class EmployeeMapperImpl implements Mapper<Employee, EmployeeDto> {
                 .build();
     }
 
-    private LocalDate getLocalDate(String date) {
+    private LocalDate toLocalDate(String date) {
         if (date.isBlank()) {
             return null;
         }

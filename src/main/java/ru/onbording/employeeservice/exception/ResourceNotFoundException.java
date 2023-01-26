@@ -15,7 +15,4 @@ public class ResourceNotFoundException extends RuntimeException {
         super("Не найдена запись с id '" + id + "'");
     }
 
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
 }
