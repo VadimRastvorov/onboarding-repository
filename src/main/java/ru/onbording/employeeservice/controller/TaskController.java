@@ -56,4 +56,10 @@ public class TaskController {
         log.info("вызов метода updateTask {}", taskDto.toString());
         return new ResponseEntity<>(taskService.updateTask(taskDto), HttpStatus.OK);
     }
+
+    @PostMapping("/list")
+    public ResponseEntity<List<ResponseTaskMessagesDto>> createTaskList(@RequestBody List<TaskDto> taskDtoList) {
+        return new ResponseEntity<>(taskService.saveTaskList(taskDtoList), HttpStatus.OK);
+    }
+
 }

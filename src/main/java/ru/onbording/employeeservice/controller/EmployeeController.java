@@ -11,7 +11,6 @@ import ru.onbording.employeeservice.dto.ResponseEmployeeMessagesDto;
 import ru.onbording.employeeservice.dto.ResponseMessageDto;
 import ru.onbording.employeeservice.service.EmployeeService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,21 +47,17 @@ public class EmployeeController {
                 employeeDto), HttpStatus.OK);
     }
 
-    @PostMapping("/list")
-    public ResponseEntity<List<ResponseEmployeeMessagesDto>> createListEmployees(@RequestBody List<EmployeeDto> listEmployeeDto) {
-        log.info("вызов метода createListEmployee");
-        List<ResponseEmployeeMessagesDto> listResponseEmployeeMessagesDto = new ArrayList<>();
-        for (EmployeeDto employeeDto : listEmployeeDto) {
-            listResponseEmployeeMessagesDto.add(employeeService.saveEmployee(
-                    employeeDto));
-        }
-        return new ResponseEntity<>(listResponseEmployeeMessagesDto, HttpStatus.OK);
-    }
-
     @PutMapping()
     public ResponseEntity<ResponseEmployeeMessagesDto> updateEmployee(@RequestBody EmployeeDto employeeDto) {
         log.info("вызов метода updateEmployee {}", employeeDto.toString());
         return new ResponseEntity<>(employeeService.updateEmployee(
                 employeeDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<List<ResponseEmployeeMessagesDto>> createListEmployees
+            (@RequestBody List<EmployeeDto> listEmployeeDto) {
+        log.info("вызов метода createListEmployee");
+        return new ResponseEntity<>(employeeService.saveEmployeeList(listEmployeeDto), HttpStatus.OK);
     }
 }

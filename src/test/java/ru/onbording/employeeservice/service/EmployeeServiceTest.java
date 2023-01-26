@@ -2,7 +2,8 @@ package ru.onbording.employeeservice.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.onbording.employeeservice.DatabaseTest;
+import org.springframework.test.context.jdbc.Sql;
+import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.data.EmployeeData;
 import ru.onbording.employeeservice.dto.EmployeeDto;
@@ -14,10 +15,10 @@ import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class EmployeeServiceTest extends DatabaseTest {
+@Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+public class EmployeeServiceTest extends InitializerTest {
 
     @Autowired
     private EmployeeService employeeService;
@@ -26,7 +27,6 @@ public class EmployeeServiceTest extends DatabaseTest {
     void testFetchEmployeeALl() { //todo результат сравни с заранее подготовленным списком
         List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
         assertThat(employeeDtoList).isNotNull();
-        //assertThat(employeeDtoList.size()).isEqualTo(6);
     }
 
     @Test
@@ -39,9 +39,7 @@ public class EmployeeServiceTest extends DatabaseTest {
     void testFetchEmployeeByIdWithOutValidId() {
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.fetchEmployeeById(119L);
-                });
+                () -> employeeService.fetchEmployeeById(119L));
     }
 
     @Test
@@ -72,18 +70,14 @@ public class EmployeeServiceTest extends DatabaseTest {
         assertThat(employeeService.fetchEmployeeAll().size()).isEqualTo(countEmployee - 1);
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.fetchEmployeeById(employeeValidId);
-                });
+                () -> employeeService.fetchEmployeeById(employeeValidId));
     }
 
     @Test
-    void testDeleteEmployeeByIdWithOutValidId() {
+    void testDeleteEmployeeByIdWithInvalidId() {
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> {
-                    employeeService.deleteEmployeeById(17L);
-                });
+                () -> employeeService.deleteEmployeeById(17L));
     }
 
     @Test

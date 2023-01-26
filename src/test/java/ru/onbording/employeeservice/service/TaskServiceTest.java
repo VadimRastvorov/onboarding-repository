@@ -2,7 +2,7 @@ package ru.onbording.employeeservice.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.onbording.employeeservice.DatabaseTest;
+import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.data.TaskData;
 import ru.onbording.employeeservice.dto.ResponseMessageDto;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class TaskServiceTest extends DatabaseTest {
+public class TaskServiceTest extends InitializerTest {
     @Autowired
     private TaskService taskService;
 
@@ -35,7 +35,7 @@ public class TaskServiceTest extends DatabaseTest {
         ResponseTaskMessagesDto responseTaskMessagesDto = taskService.saveTask(TaskData.createTaskDtoToInsert());
         assertThat(responseTaskMessagesDto.getMessages().get(0).getMessage())
                 .isEqualTo(MessageBundleConfig.getMessage("task.addRow",
-                        responseTaskMessagesDto.getTaskDto().getUuid(), "Иванова"));
+                        responseTaskMessagesDto.getTaskDto().getUuid(), "4"));
     }
 
     @Test

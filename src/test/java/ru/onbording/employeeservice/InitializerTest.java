@@ -8,36 +8,52 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
-//@Testcontainers
-@ContextConfiguration(initializers = DatabaseTest.DataSourceInitializer.class)
+@ContextConfiguration(initializers = InitializerTest.DataSourceInitializer.class)
 @TestPropertySource("/application.properties")
-public class DatabaseTest {
+public class InitializerTest {
     @BeforeAll
     static void init() {
         database.start();
+        zookeeper.start();
+        kafka.start();
     }
-    //@Container
+
     private static final PostgreSQLContainer<?> database =
-            new PostgreSQLContainer<>("postgres:14")
-                    .withInitScript("init_script.sql") //todo лучше скрипт использовать не при создании контейнера, а перед запуском тестов (над классами например) с помощью аннотации @Sql
-                    .waitingFor(Wait.forListeningPort()); //todo не думаю что эта настройка прям нужна)
+            new PostgreSQLContainer<>("postgres:latest");
+
+    private static final DockerImageName KAFKA_TEST_IMAGE = DockerImageName.parse("confluentinc/cp-kafka:latest");
+
+    private static final DockerImageName ZOOKEEPER_TEST_IMAGE = DockerImageName.parse(
+            "confluentinc/cp-zookeeper:latest"
+    );
+    private static final Network network = Network.newNetwork();
+
+    private static final KafkaContainer kafka = new KafkaContainer(KAFKA_TEST_IMAGE)
+            .withNetwork(network)
+            .withExternalZookeeper("zookeeper:2181");
+
+    private static final GenericContainer<?> zookeeper = new GenericContainer<>(ZOOKEEPER_TEST_IMAGE)
+            .withNetwork(network)
+            .withNetworkAliases("zookeeper")
+            .withEnv("ZOOKEEPER_CLIENT_PORT", "2181");
 
     public static class DataSourceInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         @Override
         public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
                     applicationContext,
-                    //"spring.test.database.replace=none",
                     "spring.datasource.driver-class-name=org.postgresql.Driver",
                     "spring.datasource.url=" + database.getJdbcUrl(),
                     "spring.datasource.username=" + database.getUsername(),
-                    "spring.datasource.password=" + database.getPassword()
+                    "spring.datasource.password=" + database.getPassword(),
+                    "spring.kafka.producer.bootstrap-servers=" + kafka.getBootstrapServers()
             );
         }
     }

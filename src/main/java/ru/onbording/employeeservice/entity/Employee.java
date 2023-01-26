@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -58,5 +57,5 @@ public class Employee {
             //orphanRemoval = true,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private List<Task> tasks = new ArrayList<Task>();
+    private List<Task> tasks;// = new ArrayList<Task>();
 }

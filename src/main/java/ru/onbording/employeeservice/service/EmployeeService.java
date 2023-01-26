@@ -1,26 +1,24 @@
 package ru.onbording.employeeservice.service;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.dto.EmployeeDto;
 import ru.onbording.employeeservice.dto.ResponseEmployeeMessagesDto;
 import ru.onbording.employeeservice.dto.ResponseMessageDto;
-import ru.onbording.employeeservice.dto.TaskDto;
 import ru.onbording.employeeservice.entity.Employee;
-import ru.onbording.employeeservice.entity.Task;
 import ru.onbording.employeeservice.exception.ResourceNotFoundException;
 import ru.onbording.employeeservice.mapper.Mapper;
 import ru.onbording.employeeservice.repository.EmployeeRepository;
+import ru.onbording.employeeservice.service.kafka.ProducerService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Slf4j
 @AllArgsConstructor
 @Service
 public class EmployeeService {
@@ -34,7 +32,7 @@ public class EmployeeService {
     private final Mapper<Employee, EmployeeDto> employeeMapper;
 
     @Autowired
-    private final Mapper<Task, TaskDto> taskMapper; //todo не используется?
+    private ProducerService producerService;
 
     public EmployeeDto fetchEmployeeDtoById(Long id) {
         return employeeMapper.entityToDto(fetchEmployeeById(id));
@@ -50,13 +48,27 @@ public class EmployeeService {
         return createResponseEmployeeMessagesDto(employeeMapper.entityToDto(employee), messages);
     }
 
+    public List<ResponseEmployeeMessagesDto> saveEmployeeList(List<EmployeeDto> employeeDtoList) {
+        List<ResponseEmployeeMessagesDto> listResponseEmployeeMessagesDto = new ArrayList<>();
+        for (EmployeeDto employeeDto : employeeDtoList) {
+            List<String> messages = employeeValidationService.checkData(employeeDto);
+            if (messages.size() == 0) {
+                producerService.produceEmployee(employeeDto);
+                messages.add(MessageBundleConfig.getMessage("employee.addRow", employeeDto.getId()));
+            }
+            listResponseEmployeeMessagesDto.add(createResponseEmployeeMessagesDto(employeeDto, messages));
+        }
+        return listResponseEmployeeMessagesDto;
+    }
+
     public ResponseEmployeeMessagesDto updateEmployee(EmployeeDto employeeDto) {
-        List<String> messages = employeeValidationService.checkData(employeeDto);
+        Employee employee = getEmployeeByEmployeeDto(employeeDto);
+        List<String> messages = employeeValidationService.checkData(employeeMapper.entityToDto(employee));
         if (messages.size() > 0) {
             return createResponseEmployeeMessagesDto
                     (employeeMapper.entityToDto(fetchEmployeeById(employeeDto.getId())), messages);
         }
-        Employee employee = employeeRepository.save(getEmployeeByEmployeeDto(employeeDto));
+        employee = employeeRepository.save(employee);
         messages.add(MessageBundleConfig.getMessage("employee.updateRow", employeeDto.getId()));
         return createResponseEmployeeMessagesDto(employeeMapper.entityToDto(employee), messages);
     }
@@ -107,7 +119,6 @@ public class EmployeeService {
 
     private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {  //todo лучше перед апдейтом EmployeeDto замаппить в Employee, дабы не заниматься парсингом тут
         Employee employee = fetchEmployeeById(employeeDto.getId());
-        List<Task> taskList = employee.getTasks(); //todo не используется?
         employee = Employee.builder()
                 .id(employee.getId())
                 .birthday(Objects.nonNull(employeeDto.getBirthday()) ?
@@ -126,8 +137,6 @@ public class EmployeeService {
                 .salary(Objects.nonNull(employeeDto.getSalary()) ?
                         Double.parseDouble(employeeDto.getSalary()) : employee.getSalary())
                 .build();
-        //employee.getTasks().clear();
-        //employee.getTasks().addAll(taskList);
         return employee;
     }
 }

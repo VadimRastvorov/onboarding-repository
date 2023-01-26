@@ -1,0 +1,2 @@
+TRUNCATE ONLY employees,tasks
+RESTART IDENTITY;

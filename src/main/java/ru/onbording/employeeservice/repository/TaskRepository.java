@@ -24,5 +24,9 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
             nativeQuery = true)
     int countTasksByEmployeeId(@Param("employeeId") long employeeId);
 
+    @Query(value = "SELECT position FROM public.employees WHERE id = :employeeId",
+            nativeQuery = true)
+    String fetchPositionByEmployeeId(@Param("employeeId") long employeeId);
+
     List<Task> findByEmployeeId(long employeeId);
 }

@@ -8,11 +8,7 @@ import java.util.ResourceBundle;
 public class MessageBundleConfig {
     public static ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle");
 
-    public static String getMessageBundleValue(String key) {
-        return bundle.getString(key);
-    } //todo не используется?
-
-    public static String getMessage(String key, Object ... arg){
+    public static String getMessage(String key, Object... arg) {
         return String.format(bundle.getString(key), arg);
     }
 }
