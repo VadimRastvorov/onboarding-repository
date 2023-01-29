@@ -1,12 +1,11 @@
 package ru.onbording.employeeservice.controller;
-
 //todo ctrl+O ?
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.FixMethodOrder;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.onbording.employeeservice.InitializerTest;
@@ -23,16 +22,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
+@Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
 public class EmployeeControllerTest extends InitializerTest {
 
     @Autowired
     private MockMvc mvc;
+
     @Autowired
     private EmployeeService employeeService;
 
     private static final String URL = "/api/employee";
 
     @Test
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testFetchEmployeeById() throws Exception {
         Long id = 3L;
         EmployeeDto employeeDto = employeeService.fetchEmployeeDtoById(id);
@@ -41,11 +43,12 @@ public class EmployeeControllerTest extends InitializerTest {
                         .characterEncoding("UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(employeeDto)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id)); //todo стоит проверять не только id, а всю сущность EmployeeDto
+                .andExpect(content().json(TestUtils.asJsonString(employeeDto)));
+        //todo стоит проверять не только id, а всю сущность EmployeeDto //done
     }
 
     @Test
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testDeleteEmployee() throws Exception {
         int id = 1;
         mvc.perform(delete(URL + "/{id}", id)
@@ -57,31 +60,37 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void test0AllEmployee() throws Exception {
         List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
         mvc.perform(get(URL + "/all")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(employeeDtoList)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").isNotEmpty()); //todo почему бы не сравнить с заранее подготовленным List<EmployeeDto>
+                .andExpect(content().json(TestUtils.asJsonString(employeeDtoList)));
+        //todo почему бы не сравнить с заранее подготовленным List<EmployeeDto> //done
     }
 
     @Test
+    @Sql({"/db/delete_tables.sql"})
     void testCreateEmployee() throws Exception {
+        Long id = 1L;
         mvc.perform(post(URL + "/")
-                        .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToInsert()))
+                        .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToInsert(id)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists()) //todo так же можно сравнить весь EmployeeDto, а чтоб исключить рандом в UUID передать его при отправке
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages").exists())
+                .andExpect(content()
+                        .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsert(id))))
+                //todo так же можно сравнить весь EmployeeDto, а чтоб исключить рандом в UUID передать его при отправке // done
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message")
-                        .value("Запись добавлена '7'"));//todo наверное ты ожидаешь определённый ответ, а не просто не пустой
+                        .value("Запись добавлена '"+id+"'"));
+                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 
     @Test
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testCreateListEmployee() throws Exception {
         mvc.perform(post(URL + "/list")
                         .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoListToInsert()))
@@ -89,21 +98,30 @@ public class EmployeeControllerTest extends InitializerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].employeeDto").exists()) //todo сравни с заранее подготовленной сущностью
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].messages").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].messages[*].message").isNotEmpty()); //todo наверное ты ожидаешь определённый ответ, а не просто не пустой
+                .andExpect(content()
+                        .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsertList())))
+                //todo сравни с заранее подготовленной сущностью //done
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].messages[0].message")
+                        .value("Запись добавлена '"+8+"'"));
+                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 
     @Test
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testUpdateEmployee() throws Exception {
+        Long id = 5L;
         mvc.perform(put(URL + "/")
-                        .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToUpdate()))
+                        .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToUpdate(id)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists()) //todo сравни с заранее подготовленной сущностью
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message").isNotEmpty()); //todo наверное ты ожидаешь определённый ответ, а не просто не пустой
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists())
+                .andExpect(content()
+                        .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoUpdate(id))))
+                //todo сравни с заранее подготовленной сущностью //done
+                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
+                        .value("Запись обновлена '"+id+"'"));
+                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 }

@@ -6,6 +6,7 @@ import ru.onbording.employeeservice.entity.Task;
 import ru.onbording.employeeservice.mapper.Mapper;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class TaskMapperImpl implements Mapper<Task, TaskDto> {
@@ -16,6 +17,8 @@ public class TaskMapperImpl implements Mapper<Task, TaskDto> {
             return null;
         }
         return Task.builder()
+                .uuid(dto.getUuid() == null || dto.getUuid().isBlank() ?
+                        UUID.randomUUID() : UUID.fromString(dto.getUuid()))
                 .description(dto.getDescription())
                 .employeeId(stringToLong(dto.getEmployeeId()))
                 .build();

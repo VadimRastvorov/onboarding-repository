@@ -47,8 +47,8 @@ public class EmployeeMapperImpl implements Mapper<Employee, EmployeeDto> {
                 .build();
     }
 
-    private LocalDate toLocalDate(String date) { //todo вместо get лучше to
-        if (date.isBlank()) {
+    private LocalDate toLocalDate(String date) { //todo вместо get лучше to //done
+        if (Objects.isNull(date) || date.isBlank()) {
             return null;
         }
         return LocalDate.parse(date);

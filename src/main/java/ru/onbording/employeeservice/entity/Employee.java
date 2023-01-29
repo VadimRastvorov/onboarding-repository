@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(exclude = {"tasks"})
 @Table(name = "employees")
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -57,5 +58,5 @@ public class Employee {
             //orphanRemoval = true,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private List<Task> tasks;// = new ArrayList<Task>();
+    private List<Task> tasks;
 }

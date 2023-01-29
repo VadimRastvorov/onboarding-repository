@@ -20,7 +20,7 @@ public class EmployeeValidationService {
     @Autowired
     private final TaskRepository taskRepository;
 
-    public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше
+    public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше // done
         List<String> messages = new ArrayList<>();
         checkRequiredData(messages, employeeDto);
         checkPosition(messages, employeeDto);
@@ -58,10 +58,11 @@ public class EmployeeValidationService {
         if (checkValidPosition(employeeDto.getPosition())) {
             messages.add(MessageBundleConfig
                     .getMessage("employee.validPosition", employeeDto.getPosition()));
+            return;
         }
         if (checkTasks(employeeDto.getId(), employeeDto.getPosition())) {
             messages.add(MessageBundleConfig
-                    .getMessage("task.taskCount"));
+                    .getMessage("task.taskCount", employeeDto.getId()));
         }
         if (checkSalary(employeeDto.getSalary(), employeeDto.getPosition())) {
             messages.add(MessageBundleConfig
@@ -77,6 +78,9 @@ public class EmployeeValidationService {
 
     private void checkWorkPeriod(List<String> messages, EmployeeDto employeeDto) {
         if (objectIsNull(employeeDto.getEndDate()) || employeeDto.getEndDate().isEmpty()) {
+            return;
+        }
+        if (objectIsNull(employeeDto.getStartDate()) || employeeDto.getStartDate().isEmpty()) {
             return;
         }
         if (LocalDate.parse(employeeDto.getStartDate()).isAfter(LocalDate.parse(employeeDto.getEndDate()))) {
@@ -106,6 +110,9 @@ public class EmployeeValidationService {
     }
 
     private boolean checkValidGender(String gender) {
+        if (objectIsNull(gender) || gender.isBlank()) {
+            return false;
+        }
         for (Gender env : Gender.values()) {
             if (env.name().equals(gender)) {
                 return false;
@@ -115,6 +122,9 @@ public class EmployeeValidationService {
     }
 
     private boolean checkValidPosition(String position) {
+        if (objectIsNull(position) || position.isBlank()) {
+            return false;
+        }
         for (Position env : Position.values()) {
             if (env.name().equals(position)) {
                 return false;
@@ -128,10 +138,10 @@ public class EmployeeValidationService {
     }
 
     private boolean checkSalary(String salary, String position) {
-        if (salary.isEmpty() && position.isEmpty()) {
+        if ((objectIsNull(salary) || salary.isEmpty()) && (objectIsNull(position) || position.isEmpty())) {
             return false;
         }
-        if (salary.isEmpty()) {
+        if (objectIsNull(salary) || salary.isEmpty()) {
             return true;
         }
         double salaryDouble = Double.parseDouble(salary);
@@ -144,7 +154,10 @@ public class EmployeeValidationService {
     }
 
     private boolean checkTasks(Long id, String position) {
-        if (id == null) {
+        if (objectIsNull(id)) {
+            return false;
+        }
+        if (objectIsNull(position) || position.isBlank()) {
             return false;
         }
         int tasksCount = taskRepository.countTasksByEmployeeId(id);

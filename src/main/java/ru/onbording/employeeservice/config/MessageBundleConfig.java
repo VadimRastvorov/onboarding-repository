@@ -11,4 +11,8 @@ public class MessageBundleConfig {
     public static String getMessage(String key, Object... arg) {
         return String.format(bundle.getString(key), arg);
     }
+
+    public static String getMessage(String key) {
+        return String.format(bundle.getString(key));
+    }
 }

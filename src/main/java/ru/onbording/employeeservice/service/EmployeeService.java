@@ -13,10 +13,8 @@ import ru.onbording.employeeservice.mapper.Mapper;
 import ru.onbording.employeeservice.repository.EmployeeRepository;
 import ru.onbording.employeeservice.service.kafka.ProducerService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -117,26 +115,24 @@ public class EmployeeService {
         return value != null ? value : defaultValue;
     }
 
-    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {  //todo лучше перед апдейтом EmployeeDto замаппить в Employee, дабы не заниматься парсингом тут
-        Employee employee = fetchEmployeeById(employeeDto.getId());
-        employee = Employee.builder()
-                .id(employee.getId())
-                .birthday(Objects.nonNull(employeeDto.getBirthday()) ?
-                        LocalDate.parse(employeeDto.getBirthday()) : employee.getBirthday())
-                .gender(getValOrDefault(employeeDto.getGender(), employee.getGender()))
-                .phone(getValOrDefault(employeeDto.getPhone(), employee.getPhone()))
-                .lastName(getValOrDefault(employeeDto.getLastName(), employee.getLastName()))
-                .firstName(getValOrDefault(employeeDto.getFirstName(), employee.getFirstName()))
-                .middleName(getValOrDefault(employeeDto.getMiddleName(), employee.getMiddleName()))
-                .position(getValOrDefault(employeeDto.getPosition(), employee.getPosition()))
-                .description(getValOrDefault(employeeDto.getDescription(), employeeDto.getDescription()))
-                .endDate(Objects.nonNull(employeeDto.getEndDate()) ?
-                        LocalDate.parse(employeeDto.getEndDate()) : employee.getEndDate())
-                .startDate(Objects.nonNull(employeeDto.getStartDate()) ?
-                        LocalDate.parse(employeeDto.getStartDate()) : employee.getStartDate())
-                .salary(Objects.nonNull(employeeDto.getSalary()) ?
-                        Double.parseDouble(employeeDto.getSalary()) : employee.getSalary())
+    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {  //todo лучше перед апдейтом EmployeeDto замаппить в Employee, дабы не заниматься парсингом тут //done
+        Employee employeeFromDto = employeeMapper.dtoToEntity(employeeDto);
+        Employee employeeFetch = fetchEmployeeById(employeeDto.getId());
+        employeeFetch = Employee.builder()
+                .id(employeeFetch.getId())
+                .birthday(getValOrDefault(employeeFromDto.getBirthday(), employeeFetch.getBirthday()))
+                .gender(getValOrDefault(employeeFromDto.getGender(), employeeFetch.getGender()))
+                .phone(getValOrDefault(employeeFromDto.getPhone(), employeeFetch.getPhone()))
+                .lastName(getValOrDefault(employeeFromDto.getLastName(), employeeFetch.getLastName()))
+                .firstName(getValOrDefault(employeeFromDto.getFirstName(), employeeFetch.getFirstName()))
+                .middleName(getValOrDefault(employeeFromDto.getMiddleName(), employeeFetch.getMiddleName()))
+                .position(getValOrDefault(employeeFromDto.getPosition(), employeeFetch.getPosition()))
+                .description(getValOrDefault(employeeFromDto.getDescription(), employeeFetch.getDescription()))
+                .endDate(getValOrDefault(employeeFromDto.getEndDate(), employeeFetch.getEndDate()))
+                .startDate(getValOrDefault(employeeFromDto.getStartDate(), employeeFetch.getStartDate()))
+                .salary(getValOrDefault(employeeFromDto.getSalary(), employeeFetch.getSalary()))
+                .tasks(employeeFetch.getTasks())
                 .build();
-        return employee;
+        return employeeFetch;
     }
 }
