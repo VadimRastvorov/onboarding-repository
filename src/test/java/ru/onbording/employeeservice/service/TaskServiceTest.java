@@ -1,10 +1,12 @@
 package ru.onbording.employeeservice.service;
 
+import org.apache.coyote.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.data.TaskData;
+import ru.onbording.employeeservice.dto.ResponseTaskMessagesDto;
 
 import java.util.UUID;
 
@@ -33,8 +35,9 @@ public class TaskServiceTest extends InitializerTest {
     @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testSaveTask() {
         String uuid = UUID.randomUUID().toString();
-        assertThat(taskService.saveTask(TaskData.createTaskDtoToInsert(uuid)))
-                .isEqualTo(TaskData.createResponseTaskMessagesDtoInsert(uuid));
+        ResponseTaskMessagesDto responseTaskMessagesDto = taskService.saveTask(TaskData.createTaskDtoToInsert(uuid));
+        assertThat(responseTaskMessagesDto)
+                .isEqualTo(TaskData.createResponseTaskMessagesDtoInsert(responseTaskMessagesDto.getTaskDto().getUuid()));
     }
 
     @Test

@@ -92,7 +92,7 @@ public class TaskData {
         return ResponseTaskMessagesDto.builder()
                 .taskDto(createTaskDtoToInsert(uuid))
                 .messages(Collections.singletonList(ResponseMessageDto.builder()
-                        .message("Задача '" + uuid + "' добавлена работнику '4'")
+                        .message("Задача добавлена работнику '4'")
                         .build()))
                 .build();
     }

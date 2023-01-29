@@ -54,8 +54,9 @@ public class TaskService {
         if (messages.size() > 0) {
             return createResponseTaskMessagesDto(taskDto, messages);
         }
-        Task task = taskRepository.save(taskMapper.dtoToEntity(taskDto));
-        messages.add(MessageBundleConfig.getMessage("task.addRow", task.getUuid(), taskDto.getEmployeeId()));
+        Task taskToInsert = taskMapper.dtoToEntity(taskDto);
+        Task task = taskRepository.save(taskToInsert);
+        messages.add(MessageBundleConfig.getMessage("task.addRow", taskDto.getEmployeeId()));
         return createResponseTaskMessagesDto(taskMapper.entityToDto(task), messages);
     }
 
@@ -65,7 +66,7 @@ public class TaskService {
             List<String> messages = taskValidationService.checkData(taskDto);
             if (messages.size() == 0) {
                 messages.add(MessageBundleConfig
-                        .getMessage("task.addRow", taskDto.getUuid(), taskDto.getEmployeeId()));
+                        .getMessage("task.addRow", taskDto.getEmployeeId()));
                 producerService.produceTask(taskDto);
             }
             responseTaskMessagesDtoList.add(createResponseTaskMessagesDto(taskDto, messages));

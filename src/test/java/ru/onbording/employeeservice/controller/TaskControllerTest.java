@@ -83,17 +83,18 @@ public class TaskControllerTest extends InitializerTest {
     @Test
     @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testCreateTask() throws Exception {
-        UUID uuid = UUID.randomUUID(); //пришлось убрать в entity Task генерацию UUID и добавить в маппинг параметр uuid
+        String uuid = UUID.randomUUID().toString();
+        //todo тут не придумал как сравнить ответ
         mvc.perform(post(URL + "/")
-                        .content(TestUtils.asJsonString(TaskData.createTaskDtoToInsert(uuid.toString())))
+                        .content(TestUtils.asJsonString(TaskData.createTaskDtoToInsert(uuid)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content()
-                        .json(TestUtils.asJsonString(TaskData.createResponseTaskMessagesDtoInsert(uuid.toString())))) //done
+                .andExpect(MockMvcResultMatchers.jsonPath("$.taskDto.description").value("task_1_employee_4"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.taskDto.employeeId").value("4"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
-                        .value("Задача '" + uuid + "' добавлена работнику '4'"));//done
+                        .value("Задача добавлена работнику '4'"));//done
     }
 
     @Test

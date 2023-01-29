@@ -2,28 +2,21 @@ package ru.onbording.employeeservice.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"uuid"})
 @Table(name = "tasks")
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Task {
     @Id
+    @GeneratedValue
     @Column(name = "id")
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(
-//            name = "UUID",
-//            strategy = "org.hibernate.id.UUIDGenerator"
-//    )
     private UUID uuid;
 
     @Column(name = "description")
