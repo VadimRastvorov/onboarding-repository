@@ -34,7 +34,7 @@ public class EmployeeControllerTest extends InitializerTest {
     private static final String URL = "/api/employee";
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})//todo над методами уже не нужно, ведь ты сделал над классом
     void testFetchEmployeeById() throws Exception {
         Long id = 3L;
         EmployeeDto employeeDto = employeeService.fetchEmployeeDtoById(id);
@@ -44,7 +44,6 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.asJsonString(employeeDto)));
-        //todo стоит проверять не только id, а всю сущность EmployeeDto //done
     }
 
     @Test
@@ -68,11 +67,10 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.asJsonString(employeeDtoList)));
-        //todo почему бы не сравнить с заранее подготовленным List<EmployeeDto> //done
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql"})
+    @Sql({"/db/delete_tables.sql"}) //todo тут надо, это правильно, потому что конфигурация отличается
     void testCreateEmployee() throws Exception {
         Long id = 1L;
         mvc.perform(post(URL + "/")
@@ -83,10 +81,8 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsert(id))))
-                //todo так же можно сравнить весь EmployeeDto, а чтоб исключить рандом в UUID передать его при отправке // done
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message")
                         .value("Запись добавлена '"+id+"'"));
-                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 
     @Test
@@ -100,10 +96,8 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsertList())))
-                //todo сравни с заранее подготовленной сущностью //done
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].messages[0].message")
                         .value("Запись добавлена '"+8+"'"));
-                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 
     @Test
@@ -119,9 +113,7 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employeeDto.id").exists())
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoUpdate(id))))
-                //todo сравни с заранее подготовленной сущностью //done
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
                         .value("Запись обновлена '"+id+"'"));
-                //todo наверное ты ожидаешь определённый ответ, а не просто не пустой //done
     }
 }

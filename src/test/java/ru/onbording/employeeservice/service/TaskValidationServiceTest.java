@@ -17,39 +17,37 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class TaskValidationServiceTest extends InitializerTest {
     @Autowired
     TaskValidationService taskValidationService;
-    //todo не хватает теста всех остальных сценариев, тогда когда поля не валидны //done
+
     @Test
-    void testCheckDataValidCheck()
-    {
+    void testCheckDataValidCheck() {
         String uuid = UUID.randomUUID().toString();
         List<String> messages = taskValidationService.checkData(TaskData.createTaskDtoToInsert(uuid));
         assertThat(messages.size()).isEqualTo(0);
     }
 
     @Test
-    void  testCheckDataWithOutEmployeeId()
-    {
+    void testCheckDataWithOutEmployeeId() {
         TaskDto taskDto = TaskDto.builder()
                 .uuid(UUID.randomUUID().toString())
                 .build();
-        assertThat(taskValidationService.checkData(taskDto)).isEqualTo(Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployeeId")));
+        assertThat(taskValidationService.checkData(taskDto))
+                .isEqualTo(Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployeeId")));
     }
 
     @Test
-    void  testCheckDataNoValidEmployeeId()
-    {
+    void testCheckDataNoValidEmployeeId() {
         String employeeId = "100";
         TaskDto taskDto = TaskDto.builder()
                 .uuid(UUID.randomUUID().toString())
                 .employeeId(employeeId)
                 .description("task_1_employee_100")
                 .build();
-        assertThat(taskValidationService.checkData(taskDto)).isEqualTo(Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployee", employeeId)));
+        assertThat(taskValidationService.checkData(taskDto))
+                .isEqualTo(Collections.singletonList(MessageBundleConfig.getMessage("task.checkEmployee", employeeId)));
     }
 
     @Test
-    void  testCheckDataMaxTaskEmployee()
-    {
+    void testCheckDataMaxTaskEmployee() {
         List<String> messages = new ArrayList<>();
         String employeeId = "1";
         String position = "ASSISTANT";

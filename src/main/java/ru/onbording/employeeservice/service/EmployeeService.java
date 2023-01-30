@@ -115,7 +115,7 @@ public class EmployeeService {
         return value != null ? value : defaultValue;
     }
 
-    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {  //todo лучше перед апдейтом EmployeeDto замаппить в Employee, дабы не заниматься парсингом тут //done
+    private Employee getEmployeeByEmployeeDto(EmployeeDto employeeDto) {
         Employee employeeFromDto = employeeMapper.dtoToEntity(employeeDto);
         Employee employeeFetch = fetchEmployeeById(employeeDto.getId());
         employeeFetch = Employee.builder()

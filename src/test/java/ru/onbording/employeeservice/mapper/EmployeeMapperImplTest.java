@@ -17,13 +17,13 @@ public class EmployeeMapperImplTest {
     private EmployeeMapperImpl employeeMapper;
 
     @Test
-    void testMapperEmployeeEntityToDto() { //todo результат сравни с заранее подготовленной сущностью //done
+    void testMapperEmployeeEntityToDto() {
         assertThat(employeeMapper.entityToDto(EmployeeData.createDataEmployee()))
                 .isEqualTo(EmployeeData.createDataEmployeeDto());
     }
 
     @Test
-    void testMapperTaskDtoToEntity() { //todo результат сравни с заранее подготовленной сущностью //done
+    void testMapperTaskDtoToEntity() {
         assertThat(employeeMapper.dtoToEntity(EmployeeData.createDataEmployeeDto()))
                 .isEqualTo(EmployeeData.createDataEmployee());
     }

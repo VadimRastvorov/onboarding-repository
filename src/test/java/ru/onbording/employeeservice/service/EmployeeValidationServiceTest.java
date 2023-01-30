@@ -20,7 +20,6 @@ EmployeeValidationServiceTest extends InitializerTest {
     @Autowired
     EmployeeValidationService employeeValidationService;
 
-    //todo не хватает теста всех остальных сценариев, тогда когда поля не валидны //done
     @Test
     void testCheckDataValidCheck() {
         List<String> messages = employeeValidationService.checkData(EmployeeData.createDataEmployeeDto());

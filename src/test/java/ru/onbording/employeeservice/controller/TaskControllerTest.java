@@ -28,7 +28,6 @@ public class TaskControllerTest extends InitializerTest {
 
     @Autowired
     private MockMvc mvc;
-    //todo те же замечания, что и в EmployeeControllerTest //done
 
     @Autowired
     private TaskService taskService;

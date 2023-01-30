@@ -18,13 +18,13 @@ public class EmployeeServiceTest extends InitializerTest {
 
     @Test
     @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql"})
-    void testFetchEmployeeALl() { //todo результат сравни с заранее подготовленным списком //done
+    void testFetchEmployeeALl() {
         assertThat(employeeService.fetchEmployeeAll()).isEqualTo(EmployeeData.createDataEmployeeDtoList());
     }
 
     @Test
     @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
-    void testFetchEmployeeByIdWithValidId() { //todo результат сравни с заранее подготовленной сущностью //done
+    void testFetchEmployeeByIdWithValidId() {
         assertThat(employeeService.fetchEmployeeById(5L)).isEqualTo(EmployeeData.createDataEmployeeById());
     }
 
@@ -36,16 +36,18 @@ public class EmployeeServiceTest extends InitializerTest {
 
     @Test
     @Sql({"/db/delete_tables.sql"})
-    void testSaveEmployee() { //todo дополнительно результат сравни с заранее подготовленной сущностью //done
+    void testSaveEmployee() {
         Long id = 1L;
-        assertThat(employeeService.saveEmployee(EmployeeData.createDataEmployeeDtoToInsert(id))).isEqualTo(EmployeeData.createResponseEmployeeMessagesDtoInsert(id));
+        assertThat(employeeService.saveEmployee(EmployeeData.createDataEmployeeDtoToInsert(id)))
+                .isEqualTo(EmployeeData.createResponseEmployeeMessagesDtoInsert(id));
     }
 
     @Test
     @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
-    void testUpdateEmployee() { //todo дополнительно результат сравни с заранее подготовленной сущностью //done
+    void testUpdateEmployee() {
         Long id = 5L;
-        assertThat(employeeService.updateEmployee(EmployeeData.createDataEmployeeDtoToUpdate(id))).isEqualTo(EmployeeData.createResponseEmployeeMessagesDtoUpdate(id));
+        assertThat(employeeService.updateEmployee(EmployeeData.createDataEmployeeDtoToUpdate(id)))
+                .isEqualTo(EmployeeData.createResponseEmployeeMessagesDtoUpdate(id));
     }
 
     @Test

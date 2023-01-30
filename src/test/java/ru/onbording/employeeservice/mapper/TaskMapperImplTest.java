@@ -18,13 +18,13 @@ public class TaskMapperImplTest {
     private TaskMapperImpl taskMapper;
 
     @Test
-    void testMapperTaskEntityToDto() { //todo результат сравни с заранее подготовленной сущностью //done
+    void testMapperTaskEntityToDto() {
         assertThat(taskMapper.entityToDto(TaskData.createTask()))
                 .isEqualTo(TaskData.createTaskDto());
     }
 
     @Test
-    void testMapperTaskDtoToEntity() { //todo результат сравни с заранее подготовленной сущностью //done
+    void testMapperTaskDtoToEntity() {
         assertThat(taskMapper.dtoToEntity(TaskData.createTaskDto()))
                 .isEqualTo(TaskData.createTask());
     }

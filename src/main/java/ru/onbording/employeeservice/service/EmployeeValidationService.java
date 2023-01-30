@@ -20,7 +20,7 @@ public class EmployeeValidationService {
     @Autowired
     private final TaskRepository taskRepository;
 
-    public List<String> checkData(EmployeeDto employeeDto) { //todo метод разросся, разбей логику внутри ещё на методы поменьше // done
+    public List<String> checkData(EmployeeDto employeeDto) {
         List<String> messages = new ArrayList<>();
         checkRequiredData(messages, employeeDto);
         checkPosition(messages, employeeDto);

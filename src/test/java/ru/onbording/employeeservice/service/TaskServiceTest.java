@@ -1,6 +1,5 @@
 package ru.onbording.employeeservice.service;
 
-import org.apache.coyote.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
@@ -16,7 +15,6 @@ public class TaskServiceTest extends InitializerTest {
     @Autowired
     private TaskService taskService;
 
-    //todo те же замечания, что и в EmployeeServiceTest //done
     @Test
     @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testFetchTaskDtoById() {
