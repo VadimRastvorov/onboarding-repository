@@ -17,9 +17,8 @@ public class TaskMapperImpl implements Mapper<Task, TaskDto> {
             return null;
         }
         return Task.builder()
-                //.uuid(dto.getUuid() == null || dto.getUuid().isBlank() ?
-                //        UUID.randomUUID() : UUID.fromString(dto.getUuid()))
-                .uuid(UUID.fromString(dto.getUuid()))
+                .uuid(dto.getUuid() == null || dto.getUuid().isBlank() ?
+                        null : UUID.fromString(dto.getUuid()))
                 .description(dto.getDescription())
                 .employeeId(stringToLong(dto.getEmployeeId()))
                 .build();

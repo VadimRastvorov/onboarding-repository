@@ -1,5 +1,4 @@
 package ru.onbording.employeeservice.controller;
-//todo ctrl+O ?
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,6 +13,7 @@ import ru.onbording.employeeservice.data.TaskData;
 import ru.onbording.employeeservice.dto.TaskDto;
 import ru.onbording.employeeservice.service.TaskService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,7 +81,7 @@ public class TaskControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql"})
     void testCreateTask() throws Exception {
         String uuid = UUID.randomUUID().toString();
         //todo тут не придумал как сравнить ответ
@@ -90,10 +91,16 @@ public class TaskControllerTest extends InitializerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.taskDto.description").value("task_1_employee_4"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.taskDto.employeeId").value("4"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
                         .value("Задача добавлена работнику '4'"));//done
+
+        mvc.perform(get(URL + "/employee/{id}", 4)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(TestUtils.asJsonString(new ArrayList<>() {{
+                    add(TaskData.createTaskDtoToInsert(uuid));
+                }}))); //done;
     }
 
     @Test
