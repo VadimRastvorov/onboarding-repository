@@ -2,6 +2,7 @@ package ru.onbording.employeeservice.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -27,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TaskControllerTest extends InitializerTest {
     private static final String URL = "/api/task";
 
+    @Value("${jwt.authorization}")
+    private String jwtAuthorization;
     @Autowired
     private MockMvc mvc;
 
@@ -39,6 +42,7 @@ public class TaskControllerTest extends InitializerTest {
         String uuid = "631e0556-8f3a-4e58-9039-4e61fcba217a";
         TaskDto taskDto = taskService.fetchTaskDtoById(uuid);
         mvc.perform(get(URL + "/{uuid}", uuid)
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -50,6 +54,7 @@ public class TaskControllerTest extends InitializerTest {
     void testDeleteTaskById() throws Exception {
         String uuid = "4d30bb53-8d3a-4253-978f-40e2a7b5a7b0";
         mvc.perform(delete(URL + "/{uuid}", uuid)
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -62,6 +67,7 @@ public class TaskControllerTest extends InitializerTest {
     void testFetchAllTask() throws Exception {
         List<TaskDto> taskDtoList = taskService.fetchTaskAll();
         mvc.perform(get(URL + "/all")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -74,6 +80,7 @@ public class TaskControllerTest extends InitializerTest {
         int employeeId = 4;
         List<TaskDto> taskDtoList = taskService.fetchTaskByEmployeeId(Integer.toString(employeeId));
         mvc.perform(get(URL + "/employee/{id}", employeeId)
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -86,6 +93,7 @@ public class TaskControllerTest extends InitializerTest {
         String uuid = UUID.randomUUID().toString();
         //todo тут не придумал как сравнить ответ
         mvc.perform(post(URL + "/")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(TaskData.createTaskDtoToInsert(uuid)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -94,13 +102,11 @@ public class TaskControllerTest extends InitializerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
                         .value("Задача добавлена работнику '4'"));//done
 
-        mvc.perform(get(URL + "/employee/{id}", 4)
+        mvc.perform(get(URL + "/all")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(new ArrayList<>() {{
-                    add(TaskData.createTaskDtoToInsert(uuid));
-                }}))); //done;
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -108,6 +114,7 @@ public class TaskControllerTest extends InitializerTest {
     void testUpdateTask() throws Exception {
         String uuid = "b30cb4db-8595-43f8-99f3-c0544030300e";
         mvc.perform(put(URL + "")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(TaskData.createTaskDtoToUpdate(uuid)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

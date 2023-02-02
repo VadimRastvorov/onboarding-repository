@@ -59,7 +59,8 @@ public class TaskController {
 
     @PostMapping("/list")
     public ResponseEntity<List<ResponseTaskMessagesDto>> createTaskList(@RequestBody List<TaskDto> taskDtoList) {
-        //todo не хватает записи в лог
+        //todo не хватает записи в лог //done
+        log.info("вызов метода createTaskList {}", taskDtoList.toString());
         return new ResponseEntity<>(taskService.saveTaskList(taskDtoList), HttpStatus.OK);
     }
 

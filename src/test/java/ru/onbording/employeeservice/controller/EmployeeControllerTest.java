@@ -2,8 +2,10 @@ package ru.onbording.employeeservice.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -24,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
 public class EmployeeControllerTest extends InitializerTest {
 
+    @Value("${jwt.authorization}")
+    private String jwtAuthorization;
     @Autowired
     private MockMvc mvc;
 
@@ -33,11 +37,12 @@ public class EmployeeControllerTest extends InitializerTest {
     private static final String URL = "/api/employee";
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})//todo над методами уже не нужно, ведь ты сделал над классом
+   //todo над методами уже не нужно, ведь ты сделал над классом//done
     void testFetchEmployeeById() throws Exception {
         Long id = 3L;
         EmployeeDto employeeDto = employeeService.fetchEmployeeDtoById(id);
         mvc.perform(get(URL + "/{id}", id)
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8"))
                 .andDo(print())
@@ -46,10 +51,10 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testDeleteEmployee() throws Exception {
         int id = 1;
         mvc.perform(delete(URL + "/{id}", id)
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -58,10 +63,10 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void test0AllEmployee() throws Exception {
         List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
         mvc.perform(get(URL + "/all")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -69,10 +74,11 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql"}) //todo тут надо, это правильно, потому что конфигурация отличается
+    @Sql({"/db/delete_tables.sql"}) //todo тут надо, это правильно, потому что конфигурация отличается //done
     void testCreateEmployee() throws Exception {
         Long id = 1L;
         mvc.perform(post(URL + "/")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToInsert(id)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -85,9 +91,9 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testCreateListEmployee() throws Exception {
         mvc.perform(post(URL + "/list")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoListToInsert()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -100,10 +106,10 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
     void testUpdateEmployee() throws Exception {
         Long id = 5L;
         mvc.perform(put(URL + "/")
+                        .header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoToUpdate(id)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
