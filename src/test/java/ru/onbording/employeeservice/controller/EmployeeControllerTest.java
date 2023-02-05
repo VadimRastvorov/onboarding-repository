@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.TestUtils;
 import ru.onbording.employeeservice.data.EmployeeData;
-import ru.onbording.employeeservice.dto.EmployeeDto;
 import ru.onbording.employeeservice.service.EmployeeService;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,17 +33,17 @@ public class EmployeeControllerTest extends InitializerTest {
     private static final String URL = "/api/employee";
 
     @Test
-   //todo над методами уже не нужно, ведь ты сделал над классом//done
+    //todo над методами уже не нужно, ведь ты сделал над классом//done
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql"})
     void testFetchEmployeeById() throws Exception {
         Long id = 3L;
-        EmployeeDto employeeDto = employeeService.fetchEmployeeDtoById(id);
         mvc.perform(get(URL + "/{id}", id)
                         .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(employeeDto)));
+                .andExpect(content().json(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoList().get(id.intValue() - 1))));
     }
 
     @Test
@@ -63,18 +59,19 @@ public class EmployeeControllerTest extends InitializerTest {
     }
 
     @Test
-    void test0AllEmployee() throws Exception {
-        List<EmployeeDto> employeeDtoList = employeeService.fetchEmployeeAll();
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql"})
+    void testAllEmployee() throws Exception {
         mvc.perform(get(URL + "/all")
                         .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(employeeDtoList)));
+                .andExpect(content().json(TestUtils.asJsonString(EmployeeData.createDataEmployeeDtoList())));
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql"}) //todo тут надо, это правильно, потому что конфигурация отличается //done
+    @Sql({"/db/delete_tables.sql"})
+        //todo тут надо, это правильно, потому что конфигурация отличается //done
     void testCreateEmployee() throws Exception {
         Long id = 1L;
         mvc.perform(post(URL + "/")
@@ -87,7 +84,7 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsert(id))))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[*].message")
-                        .value("Запись добавлена '"+id+"'"));
+                        .value("Запись добавлена '" + id + "'"));
     }
 
     @Test
@@ -102,7 +99,7 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoInsertList())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].messages[0].message")
-                        .value("Запись добавлена '"+8+"'"));
+                        .value("Запись добавлена '" + 8 + "'"));
     }
 
     @Test
@@ -119,6 +116,6 @@ public class EmployeeControllerTest extends InitializerTest {
                 .andExpect(content()
                         .json(TestUtils.asJsonString(EmployeeData.createResponseEmployeeMessagesDtoUpdate(id))))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message")
-                        .value("Запись обновлена '"+id+"'"));
+                        .value("Запись обновлена '" + id + "'"));
     }
 }

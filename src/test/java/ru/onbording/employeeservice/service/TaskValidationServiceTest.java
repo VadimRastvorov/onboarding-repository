@@ -2,6 +2,7 @@ package ru.onbording.employeeservice.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 import ru.onbording.employeeservice.InitializerTest;
 import ru.onbording.employeeservice.config.MessageBundleConfig;
 import ru.onbording.employeeservice.data.TaskData;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+@Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
 public class TaskValidationServiceTest extends InitializerTest {
     @Autowired
     TaskValidationService taskValidationService;
@@ -50,8 +51,7 @@ public class TaskValidationServiceTest extends InitializerTest {
     void testCheckDataMaxTaskEmployee() {
         List<String> messages = new ArrayList<>();
         String employeeId = "1";
-        String position = "ASSISTANT";
-        messages.add(MessageBundleConfig.getMessage("task.taskCount", employeeId, position));
+        messages.add(MessageBundleConfig.getMessage("task.taskCount", employeeId));
         TaskDto taskDto = TaskDto.builder()
                 .uuid(UUID.randomUUID().toString())
                 .employeeId(employeeId)

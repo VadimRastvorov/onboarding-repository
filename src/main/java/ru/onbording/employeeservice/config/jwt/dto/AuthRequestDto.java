@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.dto.auth;
+package ru.onbording.employeeservice.config.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class AuthRequestDto {
     private String login;
     private String password;
-    private String role;
 }

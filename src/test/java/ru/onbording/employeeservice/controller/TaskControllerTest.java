@@ -17,6 +17,7 @@ import ru.onbording.employeeservice.service.TaskService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,16 +38,18 @@ public class TaskControllerTest extends InitializerTest {
     private TaskService taskService;
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql", "/db/insert_tasks_small.sql"})
     void testFetchTaskById() throws Exception {
-        String uuid = "631e0556-8f3a-4e58-9039-4e61fcba217a";
-        TaskDto taskDto = taskService.fetchTaskDtoById(uuid);
+        String uuid = "31249236-7681-426f-880c-a6fac2adbc9e";
         mvc.perform(get(URL + "/{uuid}", uuid)
                         .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(taskDto))); //done
+                .andExpect(content().json(TestUtils.asJsonString(TaskData.createTaskDtoListByAll()
+                        .stream()
+                        .filter(c -> c.getUuid().equals(uuid))
+                        .collect(Collectors.toList()).get(0)))); //done
     }
 
     @Test
@@ -63,28 +66,29 @@ public class TaskControllerTest extends InitializerTest {
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql", "/db/insert_tasks_small.sql"})
     void testFetchAllTask() throws Exception {
-        List<TaskDto> taskDtoList = taskService.fetchTaskAll();
         mvc.perform(get(URL + "/all")
                         .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(taskDtoList))); //done;
+                .andExpect(content().json(TestUtils.asJsonString(TaskData.createTaskDtoListByAll()))); //done;
     }
 
     @Test
-    @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+    @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql", "/db/insert_tasks_small.sql"})
     void testFetchTaskByEmployeeId() throws Exception {
-        int employeeId = 4;
-        List<TaskDto> taskDtoList = taskService.fetchTaskByEmployeeId(Integer.toString(employeeId));
+        int employeeId = 2;
         mvc.perform(get(URL + "/employee/{id}", employeeId)
                         .header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.asJsonString(taskDtoList))); //done;
+                .andExpect(content().json(TestUtils.asJsonString(TaskData.createTaskDtoListByAll()
+                        .stream()
+                        .filter(c -> c.getEmployeeId().equals(Integer.toString(employeeId)))
+                        .collect(Collectors.toList())))); //done;
     }
 
     @Test

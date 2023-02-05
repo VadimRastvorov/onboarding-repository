@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.dto.auth;
+package ru.onbording.employeeservice.config.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,4 +8,5 @@ import lombok.Data;
 public class AuthResponseDto {
 
     private String token;
+    private String type;
 }

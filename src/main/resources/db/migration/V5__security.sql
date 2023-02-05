@@ -31,5 +31,5 @@ create unique index user_table_login_uindex
 
 insert into role_table(name) values ('ROLE_ADMIN');
 insert into role_table(name) values ('ROLE_USER');
-insert into user_table(login,password,role_id) values ('vadim','123456',2);
-insert into user_table(login,password,role_id) values ('ivan','123456',1);
+insert into user_table(login,password,role_id) values ('vadim','$2a$10$SYnBlYH7F18qClAz6.nrtu2xVN2PBss52kSNpHjpZY242EGoMaXI6',1);
+insert into user_table(login,password,role_id) values ('ivan','$2a$10$sGiFA7pbpxh0Ys0kZF0If.XntStbnCeI1NvnY9c46713eZpNOzySa',2);

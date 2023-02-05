@@ -13,10 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class
-
-EmployeeValidationServiceTest extends InitializerTest {
+@Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
+public class EmployeeValidationServiceTest extends InitializerTest {
     @Autowired
     EmployeeValidationService employeeValidationService;
 

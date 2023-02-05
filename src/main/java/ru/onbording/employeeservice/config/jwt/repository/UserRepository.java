@@ -1,4 +1,4 @@
-package ru.onbording.employeeservice.repository;
+package ru.onbording.employeeservice.config.jwt.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.onbording.employeeservice.entity.UserEntity;
