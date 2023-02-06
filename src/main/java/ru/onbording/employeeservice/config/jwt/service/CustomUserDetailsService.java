@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.onbording.employeeservice.config.jwt.entity.CustomUserDetails;
-import ru.onbording.employeeservice.entity.UserEntity;
 import ru.onbording.employeeservice.config.jwt.repository.UserRepository;
+import ru.onbording.employeeservice.entity.UserEntity;
 
-@Component
+@Service(value = "customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

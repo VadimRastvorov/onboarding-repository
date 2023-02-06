@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
+@WithMockUser(roles = "ADMIN")
 @Sql({"/db/delete_tables.sql", "/db/insert_employees.sql", "/db/insert_tasks.sql"})
 public class TaskControllerTest extends InitializerTest {
     private static final String URL = "/api/task";
@@ -42,7 +44,7 @@ public class TaskControllerTest extends InitializerTest {
     void testFetchTaskById() throws Exception {
         String uuid = "31249236-7681-426f-880c-a6fac2adbc9e";
         mvc.perform(get(URL + "/{uuid}", uuid)
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -57,7 +59,7 @@ public class TaskControllerTest extends InitializerTest {
     void testDeleteTaskById() throws Exception {
         String uuid = "4d30bb53-8d3a-4253-978f-40e2a7b5a7b0";
         mvc.perform(delete(URL + "/{uuid}", uuid)
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -69,7 +71,7 @@ public class TaskControllerTest extends InitializerTest {
     @Sql({"/db/delete_tables.sql", "/db/insert_employees_small.sql", "/db/insert_tasks_small.sql"})
     void testFetchAllTask() throws Exception {
         mvc.perform(get(URL + "/all")
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -81,7 +83,7 @@ public class TaskControllerTest extends InitializerTest {
     void testFetchTaskByEmployeeId() throws Exception {
         int employeeId = 2;
         mvc.perform(get(URL + "/employee/{id}", employeeId)
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -97,7 +99,7 @@ public class TaskControllerTest extends InitializerTest {
         String uuid = UUID.randomUUID().toString();
         //todo тут не придумал как сравнить ответ
         mvc.perform(post(URL + "/")
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(TaskData.createTaskDtoToInsert(uuid)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -118,7 +120,7 @@ public class TaskControllerTest extends InitializerTest {
     void testUpdateTask() throws Exception {
         String uuid = "b30cb4db-8595-43f8-99f3-c0544030300e";
         mvc.perform(put(URL + "")
-                        .header("Authorization", "Bearer " + jwtAuthorization)
+                        //.header("Authorization", "Bearer " + jwtAuthorization)
                         .content(TestUtils.asJsonString(TaskData.createTaskDtoToUpdate(uuid)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
